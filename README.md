@@ -24,8 +24,8 @@
   
    Déploiement de la base de données avec Docker:
    
-    à partir du répertoire : ```/docker/dev/```
-    exécutez la commande : ```docker-compose up```
+    à partir du répertoire : ``/docker/dev/``
+    exécutez la commande : ``docker-compose up``
   
     Variables d'environnement :
     
