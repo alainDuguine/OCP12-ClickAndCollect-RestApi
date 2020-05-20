@@ -22,27 +22,27 @@
   
   ## Déploiement
   
-   Déploiement de la base de données avec Docker:
-   
-    à partir du répertoire : ``/docker/dev/``
-    exécutez la commande : ``docker-compose up``
-  
-    Variables d'environnement :
+  ### Déploiement de la base de données avec Docker:
     
-     Pour l'exécution via Maven plusieurs variables d'environnement sont nécessaires :
+   A partir du répertoire : ```/docker/dev/``` 
+   exécutez la commande : ```docker-compose up```
+  
+  ### Variables d'environnement :
+    
+   Pour l'exécution via Maven plusieurs variables d'environnement sont nécessaires :
       
-     ```IP_SERVER``` : pour du local "localhost"    
+   ```IP_SERVER``` : pour du local "localhost"    
      
-     ```API_PORT``` : par exemple 8080
+   ```API_PORT``` : par exemple 8080
      
-     ```POSTGRESQL_ADDON_URI```: url de la base de données (jdbc:postgresql://localhost:5432/db_clickAndCollect)
+   ```POSTGRESQL_ADDON_URI```: url de la base de données (jdbc:postgresql://localhost:5432/db_clickAndCollect)
+   
+   ```POSTGRESQL_ADDON_USER```: utilisateur de la base de données (adm_clickAndCollect)
      
-     ```POSTGRESQL_ADDON_USER```: utilisateur de la base de données (adm_clickAndCollect)
-     
-     ```POSTGRESQL_ADDON_PASSWORD```: mot de passe de l'utilisateur de la base de données (admin)
-          
+   ```POSTGRESQL_ADDON_PASSWORD```: mot de passe de l'utilisateur de la base de données (admin)
+   
   ## Démarrage des applications :
           
-         exécuter la commande ```mvn spring-boot:run``` depuis ```/clickandcollect-api/clickandcollect-api-webservice>
+   Exécuter la commande ```mvn spring-boot:run``` depuis ```/clickandcollect-api/clickandcollect-api-webservice>
          
    *Les commandes ```mvn``` peuvent être remplacées par le wrapper Maven ```mvnw```*
