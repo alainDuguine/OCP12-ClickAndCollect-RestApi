@@ -43,6 +43,6 @@
    
   ## Démarrage des applications :
           
-   Exécuter la commande ```mvn spring-boot:run``` depuis ```/clickandcollect-api/clickandcollect-api-webservice>
+   Exécuter la commande ```mvn spring-boot:run``` depuis ```/clickandcollect-api/clickandcollect-api-webservice```
          
    *Les commandes ```mvn``` peuvent être remplacées par le wrapper Maven ```mvnw```*
