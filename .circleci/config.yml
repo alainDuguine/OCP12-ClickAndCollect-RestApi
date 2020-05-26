@@ -8,6 +8,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:11.0.3-jdk-stretch
+      - image: postgres:latest
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -19,6 +20,9 @@ jobs:
     environment:
       # Customize the JVM maximum heap limit
       MAVEN_OPTS: -Xmx3200m
+      POSTGRESQL_ADDON_URI: jdbc:postgresql://127.0.0.1:5432/db_clickandcollect
+      POSTGRESQL_ADDON_USER: usr_clickandconnect
+      POSTGRESQL_ADDON_PASSWORD: password
 
     steps:
       - checkout
@@ -30,6 +34,11 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
+      - run: apt-get update -qq && apt-get install -y postgresql
+      - run:
+          command: |
+            psql -h 127.0.0.1 -U postgres -c "CREATE DATABASE db_clickandcollect;"
+            psql -h 127.0.0.1 -U postgres -c "CREATE USER usr_clickandconnect WITH PASSWORD 'password'; GRANT ALL PRIVILEGES ON DATABASE db_clickandcollect TO username;"
       - run: mvn dependency:go-offline
 
       - save_cache:
