@@ -8,7 +8,11 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:11.0.3-jdk-stretch
-      - image: circleci/postgres
+      - image: circleci/postgres:9.6-alpine
+        environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: password
+        POSTGRES_DB: db_clickandcollect
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -20,10 +24,10 @@ jobs:
     environment:
       # Customize the JVM maximum heap limit
       MAVEN_OPTS: -Xmx3200m
-      POSTGRESQL_ADDON_URI: jdbc:postgresql://127.0.0.1:5432/db_clickandcollect
-      POSTGRESQL_ADDON_USER: usr_clickandconnect
-      POSTGRESQL_ADDON_PASSWORD: password
-      POSTGRES_HOST_AUTH_METHOD: trust
+#      POSTGRESQL_ADDON_URI: jdbc:postgresql://127.0.0.1:5432/db_clickandcollect
+#      POSTGRESQL_ADDON_USER: usr_clickandconnect
+#      POSTGRESQL_ADDON_PASSWORD: password
+#      POSTGRES_HOST_AUTH_METHOD: trust
 
     steps:
       - checkout
