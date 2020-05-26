@@ -11,7 +11,7 @@ jobs:
       - image: circleci/postgres:9.6-alpine
         environment:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
+          POSTGRES_PASSWORD: 8mpdcaAP
           POSTGRES_DB: db_clickandcollect
 
       # Specify service dependencies here if necessary
