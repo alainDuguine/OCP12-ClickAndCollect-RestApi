@@ -10,9 +10,9 @@ jobs:
       - image: circleci/openjdk:11.0.3-jdk-stretch
       - image: circleci/postgres:9.6-alpine
         environment:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: password
-        POSTGRES_DB: db_clickandcollect
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: db_clickandcollect
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -39,12 +39,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: apt-get update -qq && apt-get install -y postgresql
-      - run:
-          command: |
-            psql -h 127.0.0.1 -U postgres -c "CREATE DATABASE db_clickandcollect;"
-            psql -h 127.0.0.1 -U postgres -c "CREATE USER usr_clickandconnect WITH PASSWORD 'password'; GRANT ALL PRIVILEGES ON DATABASE db_clickandcollect TO username;"
-      - run: mvn dependency:go-offline
+           - run: mvn dependency:go-offline
 
       - save_cache:
           paths:
@@ -53,6 +48,10 @@ jobs:
 
       # run tests! and gen code coverage
       - run: mvn integration-test
+        environment:
+          SPRING_DATASOURCE_URL: "jdbc:postgresql://localhost:5432/db_clickandcollect?sslmode=disable"
+          SPRING_DATASOURCE_USERNAME: "postgres"
+          SPRING_DATASOURCE_PASSWORD: "password"
 
       - store_test_results:
           path: target/surefire-reports
