@@ -23,6 +23,7 @@ jobs:
       POSTGRESQL_ADDON_URI: jdbc:postgresql://127.0.0.1:5432/db_clickandcollect
       POSTGRESQL_ADDON_USER: usr_clickandconnect
       POSTGRESQL_ADDON_PASSWORD: password
+      POSTGRES_PASSWORD: password
 
     steps:
       - checkout
@@ -34,7 +35,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: apt-get update -qq && apt-get install -y postgresql -e POSTGRES_PASSWORD=password
+      - run: apt-get update -qq && apt-get install -y postgresql
       - run:
           command: |
             psql -h 127.0.0.1 -U postgres -c "CREATE DATABASE db_clickandcollect;"
