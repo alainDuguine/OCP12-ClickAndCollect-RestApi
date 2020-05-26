@@ -23,7 +23,7 @@ jobs:
       POSTGRESQL_ADDON_URI: jdbc:postgresql://127.0.0.1:5432/db_clickandcollect
       POSTGRESQL_ADDON_USER: usr_clickandconnect
       POSTGRESQL_ADDON_PASSWORD: password
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: "password"
 
     steps:
       - checkout
