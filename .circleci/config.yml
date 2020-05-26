@@ -24,9 +24,9 @@ jobs:
     environment:
       # Customize the JVM maximum heap limit
       MAVEN_OPTS: -Xmx3200m
-      SPRING_DATASOURCE_URL: "jdbc:postgresql://localhost:5432/db_clickandcollect?sslmode=disable"
-      SPRING_DATASOURCE_USERNAME: "postgres"
-      SPRING_DATASOURCE_PASSWORD: "password"
+#      SPRING_DATASOURCE_URL: "jdbc:postgresql://localhost:5432/db_clickandcollect?sslmode=disable"
+#      SPRING_DATASOURCE_USERNAME: "postgres"
+#      SPRING_DATASOURCE_PASSWORD: "password"
 
     steps:
       - checkout
