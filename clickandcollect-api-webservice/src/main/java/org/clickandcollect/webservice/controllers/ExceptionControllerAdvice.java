@@ -1,13 +1,12 @@
 package org.clickandcollect.webservice.controllers;
 
 import lombok.extern.slf4j.Slf4j;
+import org.clickandcollect.business.exceptions.ResourceDuplicationException;
 import org.clickandcollect.business.exceptions.UnknownResourceException;
 import org.clickandcollect.webservice.dtos.ApiError;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,22 +23,12 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler({UnknownResourceException.class})
     public ResponseEntity<Object> unknownResource(Exception ex, WebRequest request) {
-        log.warn("Catching {} for {}", ex.getClass(), ex.getMessage());
-        ApiError apiError = ApiError.builder()
-                .status(HttpStatus.NOT_FOUND)
-                .message(ex.getMessage())
-                .build();
-        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+        return buildError(ex, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({DuplicateKeyException.class})
+    @ExceptionHandler({ResourceDuplicationException.class})
     public ResponseEntity<Object> uniqueConstraintException(Exception ex) {
-        log.warn("Catching {} for {}", ex.getClass(), ex.getMessage());
-        ApiError apiError = ApiError.builder()
-                .status(HttpStatus.CONFLICT)
-                .message(ex.getMessage())
-                .build();
-        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+        return buildError(ex, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
@@ -61,7 +50,12 @@ public class ExceptionControllerAdvice {
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
-//    @ExceptionHandler({HttpMessageNotReadableException.class})
-//    public ResponseEntity<Object>
-
+    private ResponseEntity<Object> buildError(Exception ex, HttpStatus notFound) {
+        log.warn("Catching {} for {}", ex.getClass(), ex.getMessage());
+        ApiError apiError = ApiError.builder()
+                .status(notFound)
+                .message(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
 }
