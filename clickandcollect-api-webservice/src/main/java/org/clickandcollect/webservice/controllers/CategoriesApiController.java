@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(CategoriesApi.RESOURCE_URL)
+@RequestMapping(CategoriesApiController.RESOURCE_URL)
 @Slf4j
-public class CategoriesApi {
+public class CategoriesApiController {
 
     public static final String RESOURCE_URL = "/categories";
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
-    public CategoriesApi(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
+    public CategoriesApiController(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
     }

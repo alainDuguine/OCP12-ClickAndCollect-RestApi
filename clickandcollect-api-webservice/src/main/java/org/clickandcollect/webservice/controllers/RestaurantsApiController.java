@@ -19,9 +19,9 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(RestaurantsApi.RESOURCE_URL)
+@RequestMapping(RestaurantsApiController.RESOURCE_URL)
 @Slf4j
-public class RestaurantsApi {
+public class RestaurantsApiController {
 
     public static final String RESOURCE_URL = "/restaurants";
 
@@ -29,7 +29,7 @@ public class RestaurantsApi {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
-    public RestaurantsApi(RestaurantService restaurantService, ProductRepository productRepository, ProductMapper productMapper) {
+    public RestaurantsApiController(RestaurantService restaurantService, ProductRepository productRepository, ProductMapper productMapper) {
         this.restaurantService = restaurantService;
         this.productRepository = productRepository;
         this.productMapper = productMapper;

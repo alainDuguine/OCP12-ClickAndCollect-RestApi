@@ -12,6 +12,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.HashMap;
@@ -50,6 +51,7 @@ public class ExceptionControllerAdvice {
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
+    @ResponseBody
     private ResponseEntity<Object> buildError(Exception ex, HttpStatus notFound) {
         log.warn("Catching {} for {}", ex.getClass(), ex.getMessage());
         ApiError apiError = ApiError.builder()
