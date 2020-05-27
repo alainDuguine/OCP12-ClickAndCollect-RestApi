@@ -1,7 +1,7 @@
 package org.clickandcollect.webservice.mappers;
 
 import org.clickandcollect.model.entities.Category;
-import org.clickandcollect.webservice.dto.CategoryDto;
+import org.clickandcollect.webservice.dtos.CategoryDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;

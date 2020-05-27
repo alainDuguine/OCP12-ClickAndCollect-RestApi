@@ -1,4 +1,9 @@
-package org.clickandcollect.consumer;
+package org.clickandcollect.consumer.repositories;
 
-public interface RestaurantRepository {
+import org.clickandcollect.model.entities.Restaurant;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 }

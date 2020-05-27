@@ -1,4 +1,4 @@
-package org.clickandcollect.dtos.dto;
+package org.clickandcollect.webservice.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

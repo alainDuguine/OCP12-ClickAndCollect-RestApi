@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"org.clickandcollect"})
-@EntityScan(basePackages = {"org.clickandcollect.model.entities"})
-@EnableJpaRepositories(basePackages = {"org.clickandcollect.consumer"})
+@EntityScan(basePackages = {"org.clickandcollect"})
+@EnableJpaRepositories(basePackages = {"org.clickandcollect"})
 public class ClickAndCollectApiApplication {
 
     public static void main(String[] args) {
