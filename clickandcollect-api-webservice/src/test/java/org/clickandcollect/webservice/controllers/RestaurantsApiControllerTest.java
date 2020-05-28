@@ -16,13 +16,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,7 +41,10 @@ class RestaurantsApiControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(controller)
+                .setControllerAdvice(new ExceptionControllerAdvice())
+                .build();
     }
 
     @Test
@@ -65,13 +68,13 @@ class RestaurantsApiControllerTest {
         // productDto miss name, category and have negative value for price which is forbidden by validations annotations
         ProductDto productDto = ProductDto.builder().id(1L).price(-10.5D).build();
 
-        MvcResult mvcResult = mockMvc.perform(post("/restaurants/1/products")
+        mockMvc.perform(post("/restaurants/1/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(productDto)))
                 .andExpect(status().isBadRequest())
-                .andReturn();
-
-        String result = mvcResult.getResponse().getContentAsString();
+                .andExpect(jsonPath("errors.price").exists())
+                .andExpect(jsonPath("errors.name").exists())
+                .andExpect(jsonPath("errors.category").exists());
 
         then(restaurantService).shouldHaveNoInteractions();
         then(productMapper).shouldHaveNoInteractions();
