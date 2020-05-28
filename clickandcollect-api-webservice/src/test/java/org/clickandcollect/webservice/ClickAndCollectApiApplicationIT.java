@@ -6,10 +6,11 @@ import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
 @TestPropertySource(locations = {"classpath:/application-test.properties"})
-class ClickAndCollectApiApplicationTests {
+class ClickAndCollectApiApplicationIT {
 
     @Test
     void contextLoads() {
+        // Test Spring context
     }
 
 }
