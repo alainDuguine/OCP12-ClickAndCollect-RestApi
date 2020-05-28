@@ -30,7 +30,7 @@ public class ProductDto {
     private Double price;
     private String imageUrl;
     @NotNull
-    private CategoryDto category;
+    private String category;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private RestaurantDto restaurant;
+    private Long restaurantId;
 }

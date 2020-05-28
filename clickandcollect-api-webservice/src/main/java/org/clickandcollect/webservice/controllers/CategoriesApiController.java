@@ -26,11 +26,6 @@ public class CategoriesApiController {
         this.categoryMapper = categoryMapper;
     }
 
-//    @GetMapping("/categories")
-//    public ResponseEntity<CategoriesDto> getProductCategories(){
-//        return ResponseEntity.ok(new CategoriesDto(categoryMapper.categoryListToDtoList(categoryRepository.findAll())));
-//    }
-
     @GetMapping("")
     public ResponseEntity<List<CategoryDto>> getCategories(){
         log.info("Request for categories, returning {} results", this.categoryRepository.count());

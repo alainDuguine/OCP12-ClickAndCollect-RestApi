@@ -46,6 +46,9 @@ public class RestaurantsApiController {
 
     @GetMapping("{id}/products")
     public ResponseEntity<List<ProductDto>> getProducts(@PathVariable Long id){
-        return ResponseEntity.ok(productMapper.listProductToListProductDto(this.productRepository.findAllByRestaurantId(id)));
+        log.info("Retrieving list of products for restaurant id '{}'", id);
+        List<Product> products = this.productRepository.findAllByRestaurantId(id);
+        log.info("{} products found", products.size());
+        return new ResponseEntity<>(productMapper.listProductToListProductDto(products), HttpStatus.OK);
     }
 }

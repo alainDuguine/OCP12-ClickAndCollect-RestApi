@@ -5,7 +5,6 @@ import org.clickandcollect.business.contract.RestaurantService;
 import org.clickandcollect.consumer.repositories.ProductRepository;
 import org.clickandcollect.model.entities.Category;
 import org.clickandcollect.model.entities.Product;
-import org.clickandcollect.webservice.dtos.CategoryDto;
 import org.clickandcollect.webservice.dtos.ProductDto;
 import org.clickandcollect.webservice.mappers.ProductMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +48,7 @@ class RestaurantsApiControllerTest {
 
     @Test
     void givenValidForm_whenAddProduct_ThenShouldPersist() throws Exception {
-        ProductDto productDto = ProductDto.builder().id(1L).name("Test produit n°1").price(10.5D).category(new CategoryDto("Entrée")).build();
+        ProductDto productDto = ProductDto.builder().id(1L).name("Test produit n°1").price(10.5D).category("Entrée").build();
         Product product = Product.builder().id(1L).name("Test produit n°1").price(10.5D).category(new Category("Entrée")).build();
 
         given(restaurantService.addProduct(any(),any())).willReturn(product);
