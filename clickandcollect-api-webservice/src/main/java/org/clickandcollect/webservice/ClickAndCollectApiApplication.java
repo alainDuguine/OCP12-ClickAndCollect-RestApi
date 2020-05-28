@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 @ComponentScan(basePackages = {"org.clickandcollect"})
 @EntityScan(basePackages = {"org.clickandcollect"})
-@EnableJpaRepositories(basePackages = {"org.clickandcollect"})
+@EnableJpaRepositories(basePackages = {"org.clickandcollect.consumer"})
 public class ClickAndCollectApiApplication {
 
     public static void main(String[] args) {

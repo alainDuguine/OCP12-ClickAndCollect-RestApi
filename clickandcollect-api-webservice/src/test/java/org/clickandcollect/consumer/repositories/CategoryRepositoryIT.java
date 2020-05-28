@@ -1,6 +1,5 @@
-package org.clickandcollect.consumer;
+package org.clickandcollect.consumer.repositories;
 
-import org.clickandcollect.consumer.repositories.CategoryRepository;
 import org.clickandcollect.webservice.ClickAndCollectApiApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = ClickAndCollectApiApplication.class)
 @TestPropertySource(locations = {"classpath:/application-test.properties"})
 class CategoryRepositoryIT {
-
 
     @Autowired
     private CategoryRepository categoryRepository;
