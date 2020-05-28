@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(classes = ClickAndCollectApiApplication.class)
 @TestPropertySource(locations = {"classpath:/application-test.properties"})
-class productRepositoryIT {
+class ProductRepositoryIT {
 
     @Autowired
     private ProductRepository productRepository;
