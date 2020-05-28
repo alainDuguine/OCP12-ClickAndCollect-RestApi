@@ -1,6 +1,6 @@
 # ClickAndCollect-API
 [![CircleCI](https://circleci.com/gh/alainDuguine/ClickAndCollect-RestApi.svg?style=svg)](https://circleci.com/gh/alainDuguine/ClickAndCollect-RestApi)
-[![codecov](https://codecov.io/gh/alainDuguine/ClickAndCollect-RestApi/branch/master/graph/badge.svg)](https://codecov.io/gh/alainDuguine/ClickAndCollect-RestApi)
+[![codecov](https://codecov.io/gh/alainDuguine/ClickAndCollect-RestApi/branch/develop/graph/badge.svg)](https://codecov.io/gh/alainDuguine/ClickAndCollect-RestApi)
 
   Ce repository est l'Api Rest du projet n° 12 du parcours Java d'OpenClassrooms.
   L'application permet la mise en place de vente à emporter simple pour les commerces de bouche durant l'épidémie de Covid-19.
