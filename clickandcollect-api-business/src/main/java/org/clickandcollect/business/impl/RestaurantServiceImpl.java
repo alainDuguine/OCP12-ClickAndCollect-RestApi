@@ -56,4 +56,27 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
         return product;
     }
+
+    @Override
+    public Product updateProduct(Long productId, Long restaurantId, Product product) {
+        log.info("Retrieving product id '{}' for restaurant '{}'", productId, restaurantId);
+        if (this.productRepository.findProductByIdAndRestaurantId(productId, restaurantId).isPresent()) {
+            log.info("Product found");
+            product.setId(productId);
+            return this.productRepository.save(product);
+        } else {
+            log.info("Product not found");
+            throw new UnknownResourceException("Product '" + productId + "' doesn't exists for restaurant '" + restaurantId + "'");
+        }
+    }
+
+    @Override
+    public void deleteProduct(Long productId, Long restaurantId) {
+        log.info("Retrieving product id '{}' for restaurant '{}'", productId, restaurantId);
+        Product product = this.productRepository
+                .findProductByIdAndRestaurantId(productId, restaurantId)
+                .orElseThrow(() -> new UnknownResourceException("Product '" + productId + "' doesn't exists for restaurant '" + restaurantId + "'"));
+        log.info("Deleting product");
+        this.productRepository.delete(product);
+    }
 }

@@ -10,6 +10,4 @@ import java.util.List;
 @NoArgsConstructor @AllArgsConstructor
 public class CategoriesDto {
     private List<CategoryDto> categories;
-
-
 }

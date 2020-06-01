@@ -4,6 +4,7 @@ import org.clickandcollect.model.entities.Category;
 import org.clickandcollect.model.entities.Product;
 import org.clickandcollect.model.entities.Restaurant;
 import org.clickandcollect.webservice.ClickAndCollectApiApplication;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,11 @@ class ProductRepositoryIT {
                         Category.builder().id(1L).build()
                 )
                 .build();
+    }
+
+    @AfterEach
+    void tearDown() {
+        this.productRepository.delete(this.product);
     }
 
     @Test

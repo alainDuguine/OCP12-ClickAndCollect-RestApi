@@ -8,9 +8,11 @@ import org.clickandcollect.webservice.dtos.ProductDto;
 import org.clickandcollect.webservice.mappers.ProductMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,20 +37,43 @@ public class RestaurantsApiController {
         this.productMapper = productMapper;
     }
 
-    @PostMapping("{id}/products")
-    public ResponseEntity<ProductDto> addProduct(@PathVariable Long id,
-                                                 @Valid @RequestBody ProductDto productDto){
-        log.info("Adding a new product to restaurant id {}", id);
-        Product product = this.restaurantService.addProduct(id, productMapper.productDtoToProduct(productDto));
-        log.info("Product {} created", product.getId());
-        return new ResponseEntity<>(productMapper.productToProductDto(product), HttpStatus.CREATED);
+    @PostMapping("{restaurantId}/products")
+    public ResponseEntity<ProductDto> addProduct(@PathVariable Long restaurantId,
+                                                 @Valid @RequestBody ProductDto productDto) {
+        log.info("Adding a new product to restaurant id '{}'", restaurantId);
+        Product product = this.restaurantService.addProduct(restaurantId, this.productMapper.productDtoToProduct(productDto));
+        log.info("Product '{}' created", product.getId());
+        return new ResponseEntity<>(this.productMapper.productToProductDto(product), HttpStatus.CREATED);
     }
 
-    @GetMapping("{id}/products")
-    public ResponseEntity<List<ProductDto>> getProducts(@PathVariable Long id){
-        log.info("Retrieving list of products for restaurant id '{}'", id);
-        List<Product> products = this.productRepository.findAllByRestaurantId(id);
+    @GetMapping("{restaurantId}/products")
+    public ResponseEntity<List<ProductDto>> getProducts(@PathVariable Long restaurantId) {
+        log.info("Retrieving list of products for restaurant id '{}'", restaurantId);
+        List<Product> products = this.productRepository.findAllByRestaurantId(restaurantId);
         log.info("{} products found", products.size());
-        return new ResponseEntity<>(productMapper.listProductToListProductDto(products), HttpStatus.OK);
+        return new ResponseEntity<>(this.productMapper.listProductToListProductDto(products), HttpStatus.OK);
+    }
+
+    @PutMapping("{restaurantId}/products/{productId}")
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable Long restaurantId,
+                                                    @PathVariable Long productId,
+                                                    @Valid @RequestBody ProductDto productDto) {
+        log.info("Updating product id '{}' for restaurant id '{}'", productId, restaurantId);
+        Product product = this.restaurantService.updateProduct(
+                productId,
+                restaurantId,
+                this.productMapper.productDtoToProduct(productDto)
+        );
+        log.info("Product '{}' updated", productId);
+        return new ResponseEntity<>(this.productMapper.productToProductDto(product), HttpStatus.OK);
+    }
+
+    @DeleteMapping("{restaurantId}/products/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long restaurantId,
+                                              @PathVariable Long productId) {
+        log.info("Delete product id '{}' for restaurant id '{}'", productId, restaurantId);
+        this.restaurantService.deleteProduct(productId, restaurantId);
+        log.info("Product '{}' deleted", productId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
