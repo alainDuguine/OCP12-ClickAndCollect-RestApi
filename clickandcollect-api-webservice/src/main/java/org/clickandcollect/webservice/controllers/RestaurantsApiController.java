@@ -2,12 +2,12 @@ package org.clickandcollect.webservice.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.clickandcollect.business.contract.RestaurantService;
-import org.clickandcollect.consumer.repositories.ProductRepository;
 import org.clickandcollect.model.entities.Product;
 import org.clickandcollect.webservice.dtos.ProductDto;
 import org.clickandcollect.webservice.mappers.ProductMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,36 +22,44 @@ import java.util.List;
 
 @RestController
 @RequestMapping(RestaurantsApiController.RESOURCE_URL)
+@CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
 public class RestaurantsApiController {
 
     public static final String RESOURCE_URL = "/restaurants";
 
     private final RestaurantService restaurantService;
-    private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
-    public RestaurantsApiController(RestaurantService restaurantService, ProductRepository productRepository, ProductMapper productMapper) {
+    public RestaurantsApiController(RestaurantService restaurantService, ProductMapper productMapper) {
         this.restaurantService = restaurantService;
-        this.productRepository = productRepository;
         this.productMapper = productMapper;
+    }
+
+    @GetMapping("{restaurantId}/products")
+    public ResponseEntity<List<ProductDto>> getProducts(@PathVariable Long restaurantId) {
+        log.info("Retrieving list of products for restaurant id '{}'", restaurantId);
+        List<Product> products = this.restaurantService.findProductsByRestaurantId(restaurantId);
+        log.info("{} products found", products.size());
+        return new ResponseEntity<>(this.productMapper.listProductToListProductDto(products), HttpStatus.OK);
+    }
+
+    @GetMapping("{restaurantId}/products/{productId}")
+    public ResponseEntity<ProductDto> getProducts(@PathVariable Long restaurantId,
+                                                  @PathVariable Long productId) {
+        log.info("Retrieving the product '{}' for restaurant id '{}'", productId, restaurantId);
+        Product product = this.restaurantService.findProductByIds(restaurantId, productId);
+        log.info("Product '{}' found", product.getId());
+        return new ResponseEntity<>(this.productMapper.productToProductDto(product), HttpStatus.OK);
     }
 
     @PostMapping("{restaurantId}/products")
     public ResponseEntity<ProductDto> addProduct(@PathVariable Long restaurantId,
                                                  @Valid @RequestBody ProductDto productDto) {
         log.info("Adding a new product to restaurant id '{}'", restaurantId);
-        Product product = this.restaurantService.addProduct(restaurantId, this.productMapper.productDtoToProduct(productDto));
+        Product product = this.restaurantService.saveProduct(restaurantId, this.productMapper.productDtoToProduct(productDto));
         log.info("Product '{}' created", product.getId());
         return new ResponseEntity<>(this.productMapper.productToProductDto(product), HttpStatus.CREATED);
-    }
-
-    @GetMapping("{restaurantId}/products")
-    public ResponseEntity<List<ProductDto>> getProducts(@PathVariable Long restaurantId) {
-        log.info("Retrieving list of products for restaurant id '{}'", restaurantId);
-        List<Product> products = this.productRepository.findAllByRestaurantId(restaurantId);
-        log.info("{} products found", products.size());
-        return new ResponseEntity<>(this.productMapper.listProductToListProductDto(products), HttpStatus.OK);
     }
 
     @PutMapping("{restaurantId}/products/{productId}")

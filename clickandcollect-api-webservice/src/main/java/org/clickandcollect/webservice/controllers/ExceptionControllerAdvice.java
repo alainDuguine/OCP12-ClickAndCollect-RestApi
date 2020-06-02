@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +22,8 @@ import java.util.Map;
 @ControllerAdvice
 @Slf4j
 public class ExceptionControllerAdvice {
+
+    public static final String LOGMSG = "Catching {} for {}";
 
     @ExceptionHandler({UnknownResourceException.class})
     public ResponseEntity<Object> unknownResource(Exception ex, WebRequest request) {
@@ -34,7 +37,7 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<Object> validationException(MethodArgumentNotValidException ex, WebRequest request) {
-        log.warn("Catching {} for {}", ex.getClass(), ex.getMessage());
+        log.warn(LOGMSG, ex.getClass(), ex.getMessage());
         Map<String, String> mapErrors = new HashMap<>();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             mapErrors.put(error.getField(),error.getDefaultMessage());
@@ -51,9 +54,23 @@ public class ExceptionControllerAdvice {
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
+
+    @ExceptionHandler({MethodArgumentTypeMismatchException.class})
+    public ResponseEntity<Object> badlyFormattedArgument(MethodArgumentTypeMismatchException ex, WebRequest request) {
+        log.warn(LOGMSG, ex.getClass(), ex.getMessage());
+        Map<String, String> mapErrors = new HashMap<>();
+        mapErrors.put(ex.getName(),ex.getMessage());
+        ApiError apiError = ApiError.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .message(ex.getLocalizedMessage())
+                .errors(mapErrors)
+                .build();
+        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
     @ResponseBody
     private ResponseEntity<Object> buildError(Exception ex, HttpStatus notFound) {
-        log.warn("Catching {} for {}", ex.getClass(), ex.getMessage());
+        log.warn(LOGMSG, ex.getClass(), ex.getMessage());
         ApiError apiError = ApiError.builder()
                 .status(notFound)
                 .message(ex.getMessage())

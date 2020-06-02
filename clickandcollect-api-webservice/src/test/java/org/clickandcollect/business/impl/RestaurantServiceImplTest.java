@@ -53,7 +53,7 @@ public class RestaurantServiceImplTest {
         given(this.restaurantRepository.findById(anyLong())).willReturn(Optional.empty());
 
         assertThrows(UnknownResourceException.class,
-                () -> this.restaurantService.addProduct(1L, Product.builder().build()));
+                () -> this.restaurantService.saveProduct(1L, Product.builder().build()));
     }
 
     @Test()
@@ -62,7 +62,7 @@ public class RestaurantServiceImplTest {
         given(this.categoryRepository.findCategoryByName(anyString())).willReturn(Optional.empty());
 
         assertThrows(UnknownResourceException.class,
-                () -> restaurantService.addProduct(1L, product));
+                () -> restaurantService.saveProduct(1L, product));
     }
 
     @Test()
@@ -72,6 +72,6 @@ public class RestaurantServiceImplTest {
         given(this.productRepository.save(any())).willThrow(DataIntegrityViolationException.class);
 
         assertThrows(ResourceDuplicationException.class,
-                () -> restaurantService.addProduct(1L, product));
+                () -> restaurantService.saveProduct(1L, product));
     }
 }

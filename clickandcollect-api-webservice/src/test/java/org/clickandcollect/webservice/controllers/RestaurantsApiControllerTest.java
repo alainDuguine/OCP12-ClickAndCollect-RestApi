@@ -51,7 +51,7 @@ class RestaurantsApiControllerTest {
         ProductDto productDto = ProductDto.builder().id(1L).name("Test produit n°1").price(10.5D).category("Entrée").build();
         Product product = Product.builder().id(1L).name("Test produit n°1").price(10.5D).category(new Category("Entrée")).build();
 
-        given(restaurantService.addProduct(any(),any())).willReturn(product);
+        given(restaurantService.saveProduct(any(),any())).willReturn(product);
         given(productMapper.productToProductDto(any())).willReturn(productDto);
 
         mockMvc.perform(post("/restaurants/1/products")
@@ -59,7 +59,7 @@ class RestaurantsApiControllerTest {
                 .content(asJsonString(productDto)))
             .andExpect(status().isCreated());
 
-        then(restaurantService).should().addProduct(any(),any());
+        then(restaurantService).should().saveProduct(any(),any());
     }
 
     @Test

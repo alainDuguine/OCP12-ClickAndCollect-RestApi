@@ -13,6 +13,7 @@ import org.clickandcollect.model.entities.Restaurant;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,20 +30,34 @@ public class RestaurantServiceImpl implements RestaurantService {
         this.categoryRepository = categoryRepository;
     }
 
+
     @Override
-    public Product addProduct(Long id, Product product) {
-        log.info("Retrieving restaurant id {}", id);
+    public List<Product> findProductsByRestaurantId(Long restaurantId) {
+        log.info("Retrieving products for restaurant id '{}'", restaurantId);
+        return this.productRepository.findAllByRestaurantId(restaurantId);
+    }
+
+    @Override
+    public Product findProductByIds(Long restaurantId, Long productId) {
+        log.info("Retrieving product id '{}' for restaurant id '{}'", productId, restaurantId);
+        return this.productRepository.findProductByIdAndRestaurantId(productId, restaurantId)
+                .orElseThrow(() -> new UnknownResourceException("Unknown product " + productId));
+    }
+
+    @Override
+    public Product saveProduct(Long id, Product product) {
+        log.info("Retrieving restaurant id '{}'", id);
         if(this.restaurantRepository.findById(id).isPresent()){
-            log.info("Restaurant id {} found", id);
+            log.info("Restaurant id '{}' found", id);
             product.setRestaurant(Restaurant.builder().id(id).build());
-            log.info("Retrieving category {}", product.getCategory().getName());
+            log.info("Retrieving category '{}'", product.getCategory().getName());
             Optional<Category> category = this.categoryRepository.findCategoryByName(product.getCategory().getName());
             if (category.isPresent()){
-                log.info("Category found with id {}", category.get().getId());
+                log.info("Category found with id '{}'", category.get().getId());
                 product.setCategory(category.get());
                 try {
                     product = this.productRepository.save(product);
-                    log.info("Product id {} added to database", product.getId());
+                    log.info("Product id '{}' saved to database", product.getId());
                 } catch (DataIntegrityViolationException e) {
                     throw new ResourceDuplicationException("Product name '" + product.getName() + "' already exists");
                 }
@@ -51,7 +66,7 @@ public class RestaurantServiceImpl implements RestaurantService {
                 throw new UnknownResourceException("Unknown category " + product.getCategory().getName());
             }
         } else {
-            log.warn("Restaurant id {} does not exists", id);
+            log.warn("Restaurant id '{}' does not exists", id);
             throw new UnknownResourceException("Unknown restaurant " + id);
         }
         return product;
@@ -63,7 +78,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (this.productRepository.findProductByIdAndRestaurantId(productId, restaurantId).isPresent()) {
             log.info("Product found");
             product.setId(productId);
-            return this.productRepository.save(product);
+            return this.saveProduct(restaurantId, product);
         } else {
             log.info("Product not found");
             throw new UnknownResourceException("Product '" + productId + "' doesn't exists for restaurant '" + restaurantId + "'");
@@ -79,4 +94,5 @@ public class RestaurantServiceImpl implements RestaurantService {
         log.info("Deleting product");
         this.productRepository.delete(product);
     }
+
 }
