@@ -1,4 +1,4 @@
-package org.clickandcollect.webservice.dtos;
+package org.clickandcollect.webservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +14,4 @@ public class CategoryDto {
     private Long id;
     private String name;
 
-    public CategoryDto(String name) {
-        this.name = name;
-    }
 }

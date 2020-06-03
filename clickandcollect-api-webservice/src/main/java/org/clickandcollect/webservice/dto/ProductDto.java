@@ -1,4 +1,4 @@
-package org.clickandcollect.webservice.dtos;
+package org.clickandcollect.webservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,7 +30,7 @@ public class ProductDto {
     private Double price;
     private String imageUrl;
     @NotNull
-    private CategoryDto category;
+    private String category;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private RestaurantDto restaurant;
+    private Long restaurantId;
 }

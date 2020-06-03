@@ -1,4 +1,4 @@
-package org.clickandcollect.model.entities;
+package org.clickandcollect.model.entitie;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

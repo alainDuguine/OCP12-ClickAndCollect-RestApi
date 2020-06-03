@@ -1,9 +1,9 @@
-package org.clickandcollect.webservice.controllers;
+package org.clickandcollect.webservice.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.clickandcollect.consumer.repositories.CategoryRepository;
-import org.clickandcollect.webservice.dtos.CategoryDto;
-import org.clickandcollect.webservice.mappers.CategoryMapper;
+import org.clickandcollect.consumer.repository.CategoryRepository;
+import org.clickandcollect.webservice.dto.CategoryDto;
+import org.clickandcollect.webservice.mapper.CategoryMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,14 +26,9 @@ public class CategoriesApiController {
         this.categoryMapper = categoryMapper;
     }
 
-//    @GetMapping("/categories")
-//    public ResponseEntity<CategoriesDto> getProductCategories(){
-//        return ResponseEntity.ok(new CategoriesDto(categoryMapper.categoryListToDtoList(categoryRepository.findAll())));
-//    }
-
     @GetMapping("")
     public ResponseEntity<List<CategoryDto>> getCategories(){
-        log.info("Request for categories, returning {} results", this.categoryRepository.count());
+        log.info("Request for categories, returning '{}' results", this.categoryRepository.count());
         return ResponseEntity.ok(categoryMapper.categoryListToDtoList(categoryRepository.findAll()));
     }
 

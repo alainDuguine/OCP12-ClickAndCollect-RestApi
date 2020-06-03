@@ -1,5 +1,6 @@
-package org.clickandcollect.consumer.repositories;
+package org.clickandcollect.consumer.repositorie;
 
+import org.clickandcollect.consumer.repository.CategoryRepository;
 import org.clickandcollect.webservice.ClickAndCollectApiApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,6 @@ class CategoryRepositoryIT {
 
     @Test
     void getProductsCategories() {
-        assertThat(categoryRepository.findAll().size()).isEqualTo(5);
+        assertThat(categoryRepository.findAll().size()).isGreaterThan(0);
     }
 }

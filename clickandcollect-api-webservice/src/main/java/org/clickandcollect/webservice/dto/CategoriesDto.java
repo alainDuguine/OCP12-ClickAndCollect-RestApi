@@ -1,4 +1,4 @@
-package org.clickandcollect.webservice.dtos;
+package org.clickandcollect.webservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +10,4 @@ import java.util.List;
 @NoArgsConstructor @AllArgsConstructor
 public class CategoriesDto {
     private List<CategoryDto> categories;
-
-
 }
