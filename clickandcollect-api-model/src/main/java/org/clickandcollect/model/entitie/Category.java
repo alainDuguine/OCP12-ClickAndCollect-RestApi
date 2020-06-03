@@ -1,10 +1,9 @@
-package org.clickandcollect.model.entities;
+package org.clickandcollect.model.entitie;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,11 +16,16 @@ import java.util.List;
 @Entity
 @Data @NoArgsConstructor
 @AllArgsConstructor
-@Builder @ToString
-public class Restaurant {
+@Builder
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany(mappedBy = "restaurant")
+    private String name;
+    @OneToMany(mappedBy = "category")
     private List<Product> products = new ArrayList<>();
+
+    public Category(String name) {
+        this.name = name;
+    }
 }

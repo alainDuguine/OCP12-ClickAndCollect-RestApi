@@ -1,9 +1,9 @@
-package org.clickandcollect.webservice.controllers;
+package org.clickandcollect.webservice.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.clickandcollect.business.exceptions.ResourceDuplicationException;
-import org.clickandcollect.business.exceptions.UnknownResourceException;
-import org.clickandcollect.webservice.dtos.ApiError;
+import org.clickandcollect.business.exception.ResourceDuplicationException;
+import org.clickandcollect.business.exception.UnknownResourceException;
+import org.clickandcollect.webservice.dto.ApiError;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

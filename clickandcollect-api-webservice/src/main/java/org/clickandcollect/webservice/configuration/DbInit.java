@@ -1,12 +1,12 @@
 package org.clickandcollect.webservice.configuration;
 
 import lombok.extern.slf4j.Slf4j;
-import org.clickandcollect.consumer.repositories.CategoryRepository;
-import org.clickandcollect.consumer.repositories.ProductRepository;
-import org.clickandcollect.consumer.repositories.RestaurantRepository;
-import org.clickandcollect.model.entities.Category;
-import org.clickandcollect.model.entities.Product;
-import org.clickandcollect.model.entities.Restaurant;
+import org.clickandcollect.consumer.repository.CategoryRepository;
+import org.clickandcollect.consumer.repository.ProductRepository;
+import org.clickandcollect.consumer.repository.RestaurantRepository;
+import org.clickandcollect.model.entitie.Category;
+import org.clickandcollect.model.entitie.Product;
+import org.clickandcollect.model.entitie.Restaurant;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

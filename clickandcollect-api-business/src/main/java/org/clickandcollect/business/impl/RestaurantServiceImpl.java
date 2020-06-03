@@ -2,14 +2,14 @@ package org.clickandcollect.business.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.clickandcollect.business.contract.RestaurantService;
-import org.clickandcollect.business.exceptions.ResourceDuplicationException;
-import org.clickandcollect.business.exceptions.UnknownResourceException;
-import org.clickandcollect.consumer.repositories.CategoryRepository;
-import org.clickandcollect.consumer.repositories.ProductRepository;
-import org.clickandcollect.consumer.repositories.RestaurantRepository;
-import org.clickandcollect.model.entities.Category;
-import org.clickandcollect.model.entities.Product;
-import org.clickandcollect.model.entities.Restaurant;
+import org.clickandcollect.business.exception.ResourceDuplicationException;
+import org.clickandcollect.business.exception.UnknownResourceException;
+import org.clickandcollect.consumer.repository.CategoryRepository;
+import org.clickandcollect.consumer.repository.ProductRepository;
+import org.clickandcollect.consumer.repository.RestaurantRepository;
+import org.clickandcollect.model.entitie.Category;
+import org.clickandcollect.model.entitie.Product;
+import org.clickandcollect.model.entitie.Restaurant;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -41,15 +41,15 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Product findProductByIds(Long restaurantId, Long productId) {
         log.info("Retrieving product id '{}' for restaurant id '{}'", productId, restaurantId);
         return this.productRepository.findProductByIdAndRestaurantId(productId, restaurantId)
-                .orElseThrow(() -> new UnknownResourceException("Unknown product " + productId));
+                .orElseThrow(() -> new UnknownResourceException("Unknown product '" + productId + "'for restaurant '" + restaurantId + "'"));
     }
 
     @Override
-    public Product saveProduct(Long id, Product product) {
-        log.info("Retrieving restaurant id '{}'", id);
-        if(this.restaurantRepository.findById(id).isPresent()){
-            log.info("Restaurant id '{}' found", id);
-            product.setRestaurant(Restaurant.builder().id(id).build());
+    public Product saveProduct(Long restaurantId, Product product) {
+        log.info("Retrieving restaurant id '{}'", restaurantId);
+        if(this.restaurantRepository.findById(restaurantId).isPresent()){
+            log.info("Restaurant id '{}' found", restaurantId);
+            product.setRestaurant(Restaurant.builder().id(restaurantId).build());
             log.info("Retrieving category '{}'", product.getCategory().getName());
             Optional<Category> category = this.categoryRepository.findCategoryByName(product.getCategory().getName());
             if (category.isPresent()){
@@ -66,14 +66,14 @@ public class RestaurantServiceImpl implements RestaurantService {
                 throw new UnknownResourceException("Unknown category " + product.getCategory().getName());
             }
         } else {
-            log.warn("Restaurant id '{}' does not exists", id);
-            throw new UnknownResourceException("Unknown restaurant " + id);
+            log.warn("Restaurant id '{}' does not exists", restaurantId);
+            throw new UnknownResourceException("Unknown restaurant " + restaurantId);
         }
         return product;
     }
 
     @Override
-    public Product updateProduct(Long productId, Long restaurantId, Product product) {
+    public Product updateProduct(Long restaurantId, Long productId, Product product) {
         log.info("Retrieving product id '{}' for restaurant '{}'", productId, restaurantId);
         if (this.productRepository.findProductByIdAndRestaurantId(productId, restaurantId).isPresent()) {
             log.info("Product found");
@@ -86,7 +86,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public void deleteProduct(Long productId, Long restaurantId) {
+    public void deleteProduct(Long restaurantId, Long productId) {
         log.info("Retrieving product id '{}' for restaurant '{}'", productId, restaurantId);
         Product product = this.productRepository
                 .findProductByIdAndRestaurantId(productId, restaurantId)
