@@ -1,6 +1,5 @@
-package org.clickandcollect.consumer.repositorie;
+package org.clickandcollect.consumer.repository;
 
-import org.clickandcollect.consumer.repository.ProductRepository;
 import org.clickandcollect.model.entitie.Category;
 import org.clickandcollect.model.entitie.Product;
 import org.clickandcollect.model.entitie.Restaurant;
@@ -100,6 +99,22 @@ class ProductRepositoryIT {
     void givenExistingProductId_whenGetProduct_shouldReturnProduct() {
         Optional<Product> product = this.productRepository.findProductByIdAndRestaurantId(9999L,1L);
         assertThat(product.isEmpty()).isTrue();
+    }
+
+    @Test
+    void givenUnknownCategory_whenGetProducts_shouldReturnEmptyList() {
+        assertThat(this.productRepository.findAllByRestaurantIdAndCategoryName(1L, "test").size()).isEqualTo(0);
+    }
+
+    @Test
+    void givenExistingCategory_whenGetProducts_shouldReturnNotEmptyList() {
+        assertThat(this.productRepository.findAllByRestaurantIdAndCategoryName(1L, "Plat").size()).isGreaterThan(0);
+    }
+
+    @Test
+    void givenNoCategory_whenGetProducts_shouldReturnFullList() {
+        long nbItems = productRepository.count();
+        assertThat(this.productRepository.findAllByRestaurantIdAndCategoryName(1L, null).size()).isEqualTo(nbItems);
     }
 
 }

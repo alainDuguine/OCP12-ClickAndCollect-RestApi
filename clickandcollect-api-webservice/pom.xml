@@ -27,6 +27,11 @@
             <artifactId>clickandcollect-api-business</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.clickandcollect</groupId>
+            <artifactId>clickandcollect-api-consumer</artifactId>
+        </dependency>
+
         <!--=========================================================================
         ===== Spring ================================================================
         ==========================================================================-->

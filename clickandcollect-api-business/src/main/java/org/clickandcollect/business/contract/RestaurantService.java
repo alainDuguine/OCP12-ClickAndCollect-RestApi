@@ -8,6 +8,6 @@ public interface RestaurantService {
     Product saveProduct(Long id, Product product);
     Product updateProduct(Long restaurantId, Long productId, Product product);
     void deleteProduct(Long restaurantId, Long productId);
-    List<Product> findProductsByRestaurantId(Long restaurantId);
+    List<Product> findProductsByRestaurantId(Long restaurantId, String category);
     Product findProductByIds(Long restaurantId, Long productId);
 }

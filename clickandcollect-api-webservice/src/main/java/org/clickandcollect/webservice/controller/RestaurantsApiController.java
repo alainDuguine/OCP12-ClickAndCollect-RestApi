@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -37,9 +38,10 @@ public class RestaurantsApiController {
     }
 
     @GetMapping("{restaurantId}/products")
-    public ResponseEntity<List<ProductDto>> getProducts(@PathVariable Long restaurantId) {
+    public ResponseEntity<List<ProductDto>> getProducts(@RequestParam(value = "category", required = false) String category,
+                                                        @PathVariable Long restaurantId) {
         log.info("Retrieving list of products for restaurant id '{}'", restaurantId);
-        List<Product> products = this.restaurantService.findProductsByRestaurantId(restaurantId);
+        List<Product> products = this.restaurantService.findProductsByRestaurantId(restaurantId, category);
         log.info("{} products found", products.size());
         return new ResponseEntity<>(this.productMapper.listProductToListProductDto(products), HttpStatus.OK);
     }

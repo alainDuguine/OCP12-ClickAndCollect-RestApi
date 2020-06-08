@@ -32,9 +32,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
 
     @Override
-    public List<Product> findProductsByRestaurantId(Long restaurantId) {
-        log.info("Retrieving products for restaurant id '{}'", restaurantId);
-        return this.productRepository.findAllByRestaurantId(restaurantId);
+    public List<Product> findProductsByRestaurantId(Long restaurantId, String category) {
+        log.info("Retrieving products for restaurant id '{}' and category '{}'", restaurantId, category);
+        return this.productRepository.findAllByRestaurantIdAndCategoryName(restaurantId, category);
     }
 
     @Override

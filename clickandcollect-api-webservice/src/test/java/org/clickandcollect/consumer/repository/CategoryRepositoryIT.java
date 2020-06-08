@@ -1,6 +1,5 @@
-package org.clickandcollect.consumer.repositorie;
+package org.clickandcollect.consumer.repository;
 
-import org.clickandcollect.consumer.repository.CategoryRepository;
 import org.clickandcollect.webservice.ClickAndCollectApiApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
