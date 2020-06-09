@@ -1,6 +1,6 @@
 package org.clickandcollect.webservice.mapper;
 
-import org.clickandcollect.model.entitie.Category;
+import org.clickandcollect.model.entity.Category;
 import org.clickandcollect.webservice.dto.CategoryDto;
 import org.mapstruct.Mapper;
 

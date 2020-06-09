@@ -1,4 +1,4 @@
-package org.clickandcollect.model.entitie;
+package org.clickandcollect.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +23,14 @@ public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany(mappedBy = "restaurant")
+    @OneToMany(
+            mappedBy = "restaurant",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "restaurant",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
+    private List<Menu> menus = new ArrayList<>();
 }

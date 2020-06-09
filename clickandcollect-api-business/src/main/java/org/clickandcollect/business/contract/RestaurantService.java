@@ -1,6 +1,6 @@
 package org.clickandcollect.business.contract;
 
-import org.clickandcollect.model.entitie.Product;
+import org.clickandcollect.model.entity.Product;
 
 import java.util.List;
 

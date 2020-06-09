@@ -7,9 +7,9 @@ import org.clickandcollect.business.exception.UnknownResourceException;
 import org.clickandcollect.consumer.repository.CategoryRepository;
 import org.clickandcollect.consumer.repository.ProductRepository;
 import org.clickandcollect.consumer.repository.RestaurantRepository;
-import org.clickandcollect.model.entitie.Category;
-import org.clickandcollect.model.entitie.Product;
-import org.clickandcollect.model.entitie.Restaurant;
+import org.clickandcollect.model.entity.Category;
+import org.clickandcollect.model.entity.Product;
+import org.clickandcollect.model.entity.Restaurant;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 

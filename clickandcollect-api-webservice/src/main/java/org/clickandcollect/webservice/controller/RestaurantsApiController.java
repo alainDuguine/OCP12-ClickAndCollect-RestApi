@@ -2,7 +2,7 @@ package org.clickandcollect.webservice.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.clickandcollect.business.contract.RestaurantService;
-import org.clickandcollect.model.entitie.Product;
+import org.clickandcollect.model.entity.Product;
 import org.clickandcollect.webservice.dto.ProductDto;
 import org.clickandcollect.webservice.mapper.ProductMapper;
 import org.springframework.http.HttpStatus;

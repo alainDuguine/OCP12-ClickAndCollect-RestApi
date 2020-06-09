@@ -1,8 +1,8 @@
 package org.clickandcollect.consumer.repository;
 
-import org.clickandcollect.model.entitie.Category;
-import org.clickandcollect.model.entitie.Product;
-import org.clickandcollect.model.entitie.Restaurant;
+import org.clickandcollect.model.entity.Category;
+import org.clickandcollect.model.entity.Product;
+import org.clickandcollect.model.entity.Restaurant;
 import org.clickandcollect.webservice.ClickAndCollectApiApplication;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +25,8 @@ class ProductRepositoryIT {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
     private Product product;
 
@@ -39,20 +41,12 @@ class ProductRepositoryIT {
                         Category.builder().id(1L).build()
                 )
                 .build();
+
     }
 
     @AfterEach
     void tearDown() {
         this.productRepository.delete(this.product);
-    }
-
-    @Test
-    void givenValidProduct_whenAddNewProduct_shouldPersistToDatabase(){
-        long nbProducts = this.productRepository.count();
-
-        this.productRepository.save(product);
-
-        assertThat(this.productRepository.count()).isEqualTo(nbProducts + 1);
     }
 
     @Test
@@ -76,6 +70,19 @@ class ProductRepositoryIT {
         this.product.setId(null);
 
         assertThrows(DataIntegrityViolationException.class, () -> this.productRepository.save(product));
+        assertThat(this.productRepository.count()).isEqualTo(nbProducts + 1);
+    }
+
+    @Test
+    void givenDuplicateProductNameWithDifferentRestaurantId_whenAddNewProduct_shouldBePersistedToDatabase(){
+        Restaurant restaurant = this.restaurantRepository.save(Restaurant.builder().id(2L).build());
+
+        long nbProducts = this.productRepository.count();
+
+        this.product.setId(null);
+        this.product.setRestaurant(restaurant);
+        this.productRepository.save(product);
+
         assertThat(this.productRepository.count()).isEqualTo(nbProducts + 1);
     }
 
