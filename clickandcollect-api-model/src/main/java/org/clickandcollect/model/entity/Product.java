@@ -41,10 +41,11 @@ public class Product {
     @OneToMany(
             mappedBy = "product",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
     @Builder.Default
-    private List<ProductInMenu> productsInMenu = new ArrayList<>();
+    private List<ProductInCourse> productsInMenu = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
@@ -53,14 +54,26 @@ public class Product {
     @NotNull
     private Restaurant restaurant;
 
-    public void addProduct(ProductInMenu product) {
+    public void addProduct(ProductInCourse product) {
         this.productsInMenu.add(product);
         product.setProduct(this);
     }
 
-    public void removeProduct(ProductInMenu product) {
+    public void removeProduct(ProductInCourse product) {
         this.productsInMenu.remove(product);
         product.setProduct(null);
     }
 
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", category=" + category +
+                ", restaurant=" + restaurant +
+                '}';
+    }
 }

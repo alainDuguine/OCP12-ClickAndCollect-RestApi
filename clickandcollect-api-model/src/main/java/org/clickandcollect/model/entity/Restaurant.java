@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -18,7 +17,7 @@ import java.util.List;
 @Entity
 @Data @NoArgsConstructor
 @AllArgsConstructor
-@Builder @ToString
+@Builder
 public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,4 +32,11 @@ public class Restaurant {
             orphanRemoval = true,
             cascade = CascadeType.ALL)
     private List<Menu> menus = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "id=" + id +
+                '}';
+    }
 }

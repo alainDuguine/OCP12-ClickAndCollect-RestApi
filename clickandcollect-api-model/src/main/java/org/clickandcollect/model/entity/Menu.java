@@ -59,4 +59,16 @@ public class Menu {
         this.menuCourses.remove(course);
         course.setMenu(null);
     }
+
+    @Override
+    public String toString() {
+        return "Menu{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", menuCourses=" + menuCourses +
+                ", restaurant=" + restaurant +
+                '}';
+    }
 }

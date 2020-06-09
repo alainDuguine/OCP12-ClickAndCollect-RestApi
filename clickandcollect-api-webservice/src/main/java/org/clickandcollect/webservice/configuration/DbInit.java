@@ -9,7 +9,7 @@ import org.clickandcollect.model.entity.Category;
 import org.clickandcollect.model.entity.Menu;
 import org.clickandcollect.model.entity.MenuCourse;
 import org.clickandcollect.model.entity.Product;
-import org.clickandcollect.model.entity.ProductInMenu;
+import org.clickandcollect.model.entity.ProductInCourse;
 import org.clickandcollect.model.entity.Restaurant;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -79,14 +79,14 @@ public class DbInit implements CommandLineRunner {
                     .category(entree)
                     .build();
 
-            ProductInMenu entree1 = ProductInMenu
+            ProductInCourse entree1 = ProductInCourse
                     .builder()
                     .product(entrees.get(0))
                     .build();
 
             entreeMenu.addProductInMenu(entree1);
 
-            entreeMenu.addProductInMenu(ProductInMenu
+            entreeMenu.addProductInMenu(ProductInCourse
                     .builder()
                     .product(entrees.get(1))
                     .extraCost(1D)
@@ -97,12 +97,12 @@ public class DbInit implements CommandLineRunner {
                     .category(plat)
                     .build();
 
-            platMenu.addProductInMenu(ProductInMenu
+            platMenu.addProductInMenu(ProductInCourse
                     .builder()
                     .product(plats.get(0))
                     .build());
 
-            platMenu.addProductInMenu(ProductInMenu
+            platMenu.addProductInMenu(ProductInCourse
                     .builder()
                     .product(plats.get(1))
                     .extraCost(1D)
@@ -113,12 +113,12 @@ public class DbInit implements CommandLineRunner {
                     .category(dessert)
                     .build();
 
-            dessertMenu.addProductInMenu(ProductInMenu
+            dessertMenu.addProductInMenu(ProductInCourse
                     .builder()
                     .product(desserts.get(0))
                     .build());
 
-            dessertMenu.addProductInMenu(ProductInMenu
+            dessertMenu.addProductInMenu(ProductInCourse
                     .builder()
                     .product(desserts.get(1))
                     .extraCost(1.5D)

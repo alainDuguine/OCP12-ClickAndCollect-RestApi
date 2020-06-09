@@ -22,12 +22,12 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(RestaurantsApiController.RESOURCE_URL)
+@RequestMapping(value = RestaurantsApiController.RESOURCE_URL)
 @CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
 public class RestaurantsApiController {
 
-    public static final String RESOURCE_URL = "/restaurants";
+    public static final String RESOURCE_URL = "/restaurants/{restaurantId}";
 
     private final RestaurantService restaurantService;
     private final ProductMapper productMapper;
@@ -37,7 +37,7 @@ public class RestaurantsApiController {
         this.productMapper = productMapper;
     }
 
-    @GetMapping("{restaurantId}/products")
+    @GetMapping("/products")
     public ResponseEntity<List<ProductDto>> getProducts(@RequestParam(value = "category", required = false) String category,
                                                         @PathVariable Long restaurantId) {
         log.info("Retrieving list of products for restaurant id '{}'", restaurantId);
@@ -46,7 +46,7 @@ public class RestaurantsApiController {
         return new ResponseEntity<>(this.productMapper.listProductToListProductDto(products), HttpStatus.OK);
     }
 
-    @GetMapping("{restaurantId}/products/{productId}")
+    @GetMapping("/products/{productId}")
     public ResponseEntity<ProductDto> getProduct(@PathVariable Long restaurantId,
                                                   @PathVariable Long productId) {
         log.info("Retrieving the product '{}' for restaurant id '{}'", productId, restaurantId);
@@ -55,7 +55,7 @@ public class RestaurantsApiController {
         return new ResponseEntity<>(this.productMapper.productToProductDto(product), HttpStatus.OK);
     }
 
-    @PostMapping("{restaurantId}/products")
+    @PostMapping("/products")
     public ResponseEntity<ProductDto> addProduct(@PathVariable Long restaurantId,
                                                  @Valid @RequestBody ProductDto productDto) {
         log.info("Adding a new product to restaurant id '{}'", restaurantId);
@@ -64,7 +64,7 @@ public class RestaurantsApiController {
         return new ResponseEntity<>(this.productMapper.productToProductDto(product), HttpStatus.CREATED);
     }
 
-    @PutMapping("{restaurantId}/products/{productId}")
+    @PutMapping("/products/{productId}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable Long restaurantId,
                                                     @PathVariable Long productId,
                                                     @Valid @RequestBody ProductDto productDto) {
@@ -78,7 +78,7 @@ public class RestaurantsApiController {
         return new ResponseEntity<>(this.productMapper.productToProductDto(product), HttpStatus.OK);
     }
 
-    @DeleteMapping("{restaurantId}/products/{productId}")
+    @DeleteMapping("/products/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long restaurantId,
                                               @PathVariable Long productId) {
         log.info("Delete product id '{}' for restaurant id '{}'", productId, restaurantId);

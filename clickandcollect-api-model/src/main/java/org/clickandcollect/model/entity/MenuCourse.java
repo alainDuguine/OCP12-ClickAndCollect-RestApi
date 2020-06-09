@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,23 +29,31 @@ public class MenuCourse {
             orphanRemoval = true
     )
     @Builder.Default
-    private List<ProductInMenu> productsInMenu = new ArrayList<>();
+    private List<ProductInCourse> productsInCourse = new ArrayList<>();
 
-    @ManyToOne()
-    @NotNull
-    private Menu menu;
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     private Category category;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    private Menu menu;
 
-    public void addProductInMenu(ProductInMenu productInMenu) {
-        this.productsInMenu.add(productInMenu);
-        productInMenu.setMenuCourse(this);
+    public void addProductInMenu(ProductInCourse productInCourse) {
+        this.productsInCourse.add(productInCourse);
+        productInCourse.setMenuCourse(this);
     }
 
-    public void removeProduct(ProductInMenu productInMenu) {
-        this.productsInMenu.remove(productInMenu);
-        productInMenu.setMenuCourse(null);
+    public void removeProduct(ProductInCourse productInCourse) {
+        this.productsInCourse.remove(productInCourse);
+        productInCourse.setMenuCourse(null);
     }
 
+    @Override
+    public String toString() {
+        return "MenuCourse{" +
+                "id=" + id +
+                ", productsInMenu=" + productsInCourse +
+                ", category=" + category +
+                '}';
+    }
 }

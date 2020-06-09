@@ -39,4 +39,12 @@ public class Category {
         this.products.remove(product);
         product.setCategory(null);
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
