@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
@@ -18,10 +19,13 @@ public class ProductInMenu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne()
-    private Product product;
-    @ManyToOne
-    private MenuCourse menuCourse;
     @Min(0)
-    private double extraCost;
+    private Double extraCost;
+
+    @ManyToOne()
+    @NotNull
+    private Product product;
+    @ManyToOne()
+    @NotNull
+    private MenuCourse menuCourse;
 }

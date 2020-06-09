@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Data @NoArgsConstructor @AllArgsConstructor
+@Builder
 @Table(
     uniqueConstraints = @UniqueConstraint(columnNames = {"restaurant_id","name"})
 )
@@ -37,12 +38,25 @@ public class Menu {
     @Min(0)
     @NotNull
     private Double price;
+
     @OneToMany(
             mappedBy = "menu",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<MenuCourse> menuCourse = new ArrayList<>();
+    @Builder.Default
+    private List<MenuCourse> menuCourses = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     private Restaurant restaurant;
+
+    public void addCourse(MenuCourse course) {
+        this.menuCourses.add(course);
+        course.setMenu(this);
+    }
+
+    public void removeCourse(MenuCourse course) {
+        this.menuCourses.remove(course);
+        course.setMenu(null);
+    }
 }

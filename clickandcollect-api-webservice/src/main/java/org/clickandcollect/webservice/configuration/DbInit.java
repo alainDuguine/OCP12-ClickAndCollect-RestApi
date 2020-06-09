@@ -2,10 +2,14 @@ package org.clickandcollect.webservice.configuration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.clickandcollect.consumer.repository.CategoryRepository;
+import org.clickandcollect.consumer.repository.MenuRepository;
 import org.clickandcollect.consumer.repository.ProductRepository;
 import org.clickandcollect.consumer.repository.RestaurantRepository;
 import org.clickandcollect.model.entity.Category;
+import org.clickandcollect.model.entity.Menu;
+import org.clickandcollect.model.entity.MenuCourse;
 import org.clickandcollect.model.entity.Product;
+import org.clickandcollect.model.entity.ProductInMenu;
 import org.clickandcollect.model.entity.Restaurant;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -20,11 +24,13 @@ public class DbInit implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final RestaurantRepository restaurantRepository;
     private final ProductRepository productRepository;
+    private final MenuRepository menuRepository;
 
-    public DbInit(CategoryRepository categoryRepository, RestaurantRepository restaurantRepository, ProductRepository productRepository) {
+    public DbInit(CategoryRepository categoryRepository, RestaurantRepository restaurantRepository, ProductRepository productRepository, MenuRepository menuRepository) {
         this.categoryRepository = categoryRepository;
         this.restaurantRepository = restaurantRepository;
         this.productRepository = productRepository;
+        this.menuRepository = menuRepository;
     }
 
     @Override
@@ -56,6 +62,73 @@ public class DbInit implements CommandLineRunner {
             products.add(Product.builder().name("Riz au lait").category(plat).description("Un riz au lait crémeux avec une délicate touche de vanille de Madagasscar").category(dessert).imageUrl("https://assets.afcdn.com/recipe/20171124/75539_w1024h768c1cx2760cy1886cxt0cyt0cxb5520cyb3773.jpg").restaurant(restaurant).price(5.5).build());
 
             this.productRepository.saveAll(products);
+
+            List<Product> entrees = this.productRepository.findAllByRestaurantIdAndCategoryName(restaurant.getId(), entree.getName());
+            List<Product> plats = this.productRepository.findAllByRestaurantIdAndCategoryName(restaurant.getId(), plat.getName());
+            List<Product> desserts = this.productRepository.findAllByRestaurantIdAndCategoryName(restaurant.getId(), dessert.getName());
+
+            Menu menu1 = Menu.builder()
+                    .name("Menu Complet")
+                    .description("Un menu avec une entrée, un plat et un dessert au choix")
+                    .restaurant(restaurant)
+                    .price(16D)
+                    .build();
+
+            MenuCourse entreeMenu = MenuCourse
+                    .builder()
+                    .category(entree)
+                    .build();
+
+            ProductInMenu entree1 = ProductInMenu
+                    .builder()
+                    .product(entrees.get(0))
+                    .build();
+
+            entreeMenu.addProductInMenu(entree1);
+
+            entreeMenu.addProductInMenu(ProductInMenu
+                    .builder()
+                    .product(entrees.get(1))
+                    .extraCost(1D)
+                    .build());
+
+            MenuCourse platMenu = MenuCourse
+                    .builder()
+                    .category(plat)
+                    .build();
+
+            platMenu.addProductInMenu(ProductInMenu
+                    .builder()
+                    .product(plats.get(0))
+                    .build());
+
+            platMenu.addProductInMenu(ProductInMenu
+                    .builder()
+                    .product(plats.get(1))
+                    .extraCost(1D)
+                    .build());
+
+            MenuCourse dessertMenu = MenuCourse
+                    .builder()
+                    .category(dessert)
+                    .build();
+
+            dessertMenu.addProductInMenu(ProductInMenu
+                    .builder()
+                    .product(desserts.get(0))
+                    .build());
+
+            dessertMenu.addProductInMenu(ProductInMenu
+                    .builder()
+                    .product(desserts.get(1))
+                    .extraCost(1.5D)
+                    .build());
+
+            menu1.addCourse(entreeMenu);
+            menu1.addCourse(platMenu);
+            menu1.addCourse(dessertMenu);
+
+            this.menuRepository.save(menu1);
         }
     }
 }

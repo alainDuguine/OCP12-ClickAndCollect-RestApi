@@ -38,17 +38,29 @@ public class Product {
     @NotNull
     private Double price;
     private String imageUrl;
+    @OneToMany(
+            mappedBy = "product",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @Builder.Default
+    private List<ProductInMenu> productsInMenu = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     private Category category;
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     private Restaurant restaurant;
-    @OneToMany(
-            mappedBy = "product",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<ProductInMenu> productsInMenu = new ArrayList<>();
+
+    public void addProduct(ProductInMenu product) {
+        this.productsInMenu.add(product);
+        product.setProduct(this);
+    }
+
+    public void removeProduct(ProductInMenu product) {
+        this.productsInMenu.remove(product);
+        product.setProduct(null);
+    }
 
 }

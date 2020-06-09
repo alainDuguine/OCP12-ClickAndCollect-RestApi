@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,16 +22,29 @@ public class MenuCourse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne()
-    private Menu menu;
-    @ManyToOne()
-    private Category category;
-
     @OneToMany(
             mappedBy = "menuCourse",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @Builder.Default
     private List<ProductInMenu> productsInMenu = new ArrayList<>();
+
+    @ManyToOne()
+    @NotNull
+    private Menu menu;
+    @ManyToOne()
+    @NotNull
+    private Category category;
+
+    public void addProductInMenu(ProductInMenu productInMenu) {
+        this.productsInMenu.add(productInMenu);
+        productInMenu.setMenuCourse(this);
+    }
+
+    public void removeProduct(ProductInMenu productInMenu) {
+        this.productsInMenu.remove(productInMenu);
+        productInMenu.setMenuCourse(null);
+    }
+
 }
