@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
@@ -24,10 +23,8 @@ public class ProductInCourse {
     private Double extraCost;
 
     @ManyToOne()
-    @NotNull
     private Product product;
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
     private MenuCourse menuCourse;
 
     @Override

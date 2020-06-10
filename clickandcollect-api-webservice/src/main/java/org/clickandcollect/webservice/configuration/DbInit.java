@@ -84,9 +84,9 @@ public class DbInit implements CommandLineRunner {
                     .product(entrees.get(0))
                     .build();
 
-            entreeMenu.addProductInMenu(entree1);
+            entreeMenu.addProductInCourse(entree1);
 
-            entreeMenu.addProductInMenu(ProductInCourse
+            entreeMenu.addProductInCourse(ProductInCourse
                     .builder()
                     .product(entrees.get(1))
                     .extraCost(1D)
@@ -97,12 +97,12 @@ public class DbInit implements CommandLineRunner {
                     .category(plat)
                     .build();
 
-            platMenu.addProductInMenu(ProductInCourse
+            platMenu.addProductInCourse(ProductInCourse
                     .builder()
                     .product(plats.get(0))
                     .build());
 
-            platMenu.addProductInMenu(ProductInCourse
+            platMenu.addProductInCourse(ProductInCourse
                     .builder()
                     .product(plats.get(1))
                     .extraCost(1D)
@@ -113,12 +113,12 @@ public class DbInit implements CommandLineRunner {
                     .category(dessert)
                     .build();
 
-            dessertMenu.addProductInMenu(ProductInCourse
+            dessertMenu.addProductInCourse(ProductInCourse
                     .builder()
                     .product(desserts.get(0))
                     .build());
 
-            dessertMenu.addProductInMenu(ProductInCourse
+            dessertMenu.addProductInCourse(ProductInCourse
                     .builder()
                     .product(desserts.get(1))
                     .extraCost(1.5D)

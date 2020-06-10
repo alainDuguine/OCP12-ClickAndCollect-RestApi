@@ -47,7 +47,6 @@ public class Menu {
     private List<MenuCourse> menuCourses = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
     private Restaurant restaurant;
 
     public void addCourse(MenuCourse course) {

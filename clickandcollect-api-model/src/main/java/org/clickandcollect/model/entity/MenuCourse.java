@@ -13,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,13 +31,11 @@ public class MenuCourse {
     private List<ProductInCourse> productsInCourse = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
     private Category category;
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
     private Menu menu;
 
-    public void addProductInMenu(ProductInCourse productInCourse) {
+    public void addProductInCourse(ProductInCourse productInCourse) {
         this.productsInCourse.add(productInCourse);
         productInCourse.setMenuCourse(this);
     }

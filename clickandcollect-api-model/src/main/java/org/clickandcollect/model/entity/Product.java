@@ -54,16 +54,6 @@ public class Product {
     @NotNull
     private Restaurant restaurant;
 
-    public void addProduct(ProductInCourse product) {
-        this.productsInMenu.add(product);
-        product.setProduct(this);
-    }
-
-    public void removeProduct(ProductInCourse product) {
-        this.productsInMenu.remove(product);
-        product.setProduct(null);
-    }
-
     @Override
     public String toString() {
         return "Product{" +
