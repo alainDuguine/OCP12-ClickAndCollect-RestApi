@@ -8,6 +8,7 @@ import org.clickandcollect.webservice.mapper.MenuMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,6 +50,14 @@ public class MenusApiController {
         Menu menu = this.menuService.saveMenu(restaurantId, this.menuMapper.menuDtoToMenu(menuDto));
         log.info("Menu '{}' created", menu.getId());
         return new ResponseEntity<>(this.menuMapper.menuToDto(menu), HttpStatus.CREATED);
+    }
 
+    @DeleteMapping("{menuId}")
+    public ResponseEntity<Void> deleteMenu(@PathVariable Long restaurantId,
+                                           @PathVariable Long menuId) {
+        log.info("Delete menu id '{}' for restaurant id '{}'", menuId, restaurantId);
+        this.menuService.deleteMenu(restaurantId, menuId);
+        log.info("Menu '{}' deleted", menuId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

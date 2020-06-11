@@ -78,4 +78,14 @@ public class MenuServiceImpl implements MenuService {
         }
         return menuRepository.save(menu);
     }
+
+    @Override
+    public void deleteMenu(Long restaurantId, Long menuId) {
+        log.info("Retrieving menu id '{}' for restaurant '{}'", menuId, restaurantId);
+        Menu menu = this.menuRepository
+                .findMenuByIdAndRestaurantId(menuId, restaurantId)
+                .orElseThrow(() -> new UnknownResourceException("Unknown menu '" + menuId + "' for restaurant '" + restaurantId + "'"));
+        log.info("Deleting menu");
+        this.menuRepository.delete(menu);
+    }
 }
