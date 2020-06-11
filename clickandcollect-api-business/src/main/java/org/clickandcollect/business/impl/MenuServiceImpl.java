@@ -80,12 +80,29 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    public Menu updateMenu(Long restaurantId, Long menuId, Menu menu) {
+        log.info("Retrieving menu id '{}' for restaurant '{}'", menuId, restaurantId);
+        if (this.menuRepository.findMenuByIdAndRestaurantId(menuId, restaurantId).isPresent()) {
+            log.info("Menu found");
+            menu.setId(menuId);
+            return this.saveMenu(restaurantId, menu);
+        } else {
+            log.info("Menu not found");
+            throw new UnknownResourceException(this.getUnknownResourceErrorMessage(menuId, restaurantId));
+        }
+    }
+
+    @Override
     public void deleteMenu(Long restaurantId, Long menuId) {
         log.info("Retrieving menu id '{}' for restaurant '{}'", menuId, restaurantId);
         Menu menu = this.menuRepository
                 .findMenuByIdAndRestaurantId(menuId, restaurantId)
-                .orElseThrow(() -> new UnknownResourceException("Unknown menu '" + menuId + "' for restaurant '" + restaurantId + "'"));
+                .orElseThrow(() -> new UnknownResourceException(this.getUnknownResourceErrorMessage(menuId, restaurantId)));
         log.info("Deleting menu");
         this.menuRepository.delete(menu);
+    }
+
+    private String getUnknownResourceErrorMessage(Long menuId, Long restaurantId){
+        return "Unknown menu '" + menuId + "' restaurant '" + restaurantId + "'";
     }
 }

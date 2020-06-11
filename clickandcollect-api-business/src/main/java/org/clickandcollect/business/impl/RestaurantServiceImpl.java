@@ -41,7 +41,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Product findProductByIds(Long restaurantId, Long productId) {
         log.info("Retrieving product id '{}' for restaurant id '{}'", productId, restaurantId);
         return this.productRepository.findProductByIdAndRestaurantId(productId, restaurantId)
-                .orElseThrow(() -> new UnknownResourceException("Unknown product '" + productId + "'for restaurant '" + restaurantId + "'"));
+                .orElseThrow(() -> new UnknownResourceException(this.getUnknownResourceErrorMessage(productId, restaurantId)));
     }
 
     @Override
@@ -81,7 +81,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             return this.saveProduct(restaurantId, product);
         } else {
             log.info("Product not found");
-            throw new UnknownResourceException("Product '" + productId + "' doesn't exists for restaurant '" + restaurantId + "'");
+            throw new UnknownResourceException(this.getUnknownResourceErrorMessage(productId, restaurantId));
         }
     }
 
@@ -90,9 +90,12 @@ public class RestaurantServiceImpl implements RestaurantService {
         log.info("Retrieving product id '{}' for restaurant '{}'", productId, restaurantId);
         Product product = this.productRepository
                 .findProductByIdAndRestaurantId(productId, restaurantId)
-                .orElseThrow(() -> new UnknownResourceException("Product '" + productId + "' doesn't exists for restaurant '" + restaurantId + "'"));
+                .orElseThrow(() -> new UnknownResourceException(this.getUnknownResourceErrorMessage(productId, restaurantId)));
         log.info("Deleting product");
         this.productRepository.delete(product);
     }
 
+    private String getUnknownResourceErrorMessage(Long productId, Long restaurantId){
+        return "Unknown product '" + productId + "' restaurant '" + restaurantId + "'";
+    }
 }

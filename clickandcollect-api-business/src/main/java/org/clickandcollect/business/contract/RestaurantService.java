@@ -5,9 +5,9 @@ import org.clickandcollect.model.entity.Product;
 import java.util.List;
 
 public interface RestaurantService {
+    List<Product> findProductsByRestaurantId(Long restaurantId, String category);
+    Product findProductByIds(Long restaurantId, Long productId);
     Product saveProduct(Long id, Product product);
     Product updateProduct(Long restaurantId, Long productId, Product product);
     void deleteProduct(Long restaurantId, Long productId);
-    List<Product> findProductsByRestaurantId(Long restaurantId, String category);
-    Product findProductByIds(Long restaurantId, Long productId);
 }
