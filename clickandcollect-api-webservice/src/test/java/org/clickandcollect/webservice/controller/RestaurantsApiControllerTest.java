@@ -2,7 +2,6 @@ package org.clickandcollect.webservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.clickandcollect.business.contract.RestaurantService;
-import org.clickandcollect.consumer.repository.ProductRepository;
 import org.clickandcollect.model.entity.Category;
 import org.clickandcollect.model.entity.Product;
 import org.clickandcollect.webservice.dto.ProductDto;
@@ -30,8 +29,6 @@ class RestaurantsApiControllerTest {
 
     @Mock
     private RestaurantService restaurantService;
-    @Mock
-    private ProductRepository productRepository;
     @Mock
     private ProductMapper productMapper;
     @InjectMocks

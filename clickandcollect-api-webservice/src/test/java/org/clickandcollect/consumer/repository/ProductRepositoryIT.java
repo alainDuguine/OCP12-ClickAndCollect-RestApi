@@ -4,7 +4,6 @@ import org.clickandcollect.model.entity.Category;
 import org.clickandcollect.model.entity.Product;
 import org.clickandcollect.model.entity.Restaurant;
 import org.clickandcollect.webservice.ClickAndCollectApiApplication;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +43,6 @@ class ProductRepositoryIT {
 
     }
 
-    @AfterEach
-    void tearDown() {
-        this.productRepository.delete(this.product);
-    }
-
     @Test
     void givenInvalidProduct_whenAddNewProduct_shouldNotBePersistedToDatabase(){
         long nbProducts = this.productRepository.count();
@@ -63,27 +57,41 @@ class ProductRepositoryIT {
     void givenDuplicateProductName_whenAddNewProduct_shouldNotBePersistedToDatabase(){
         long nbProducts = this.productRepository.count();
 
-        this.productRepository.save(product);
+        this.product = this.productRepository.save(product);
 
         assertThat(this.productRepository.count()).isEqualTo(nbProducts + 1);
 
+        Long id = this.product.getId();
         this.product.setId(null);
 
         assertThrows(DataIntegrityViolationException.class, () -> this.productRepository.save(product));
         assertThat(this.productRepository.count()).isEqualTo(nbProducts + 1);
+
+        this.productRepository.deleteById(id);
     }
 
     @Test
     void givenDuplicateProductNameWithDifferentRestaurantId_whenAddNewProduct_shouldBePersistedToDatabase(){
         Restaurant restaurant = this.restaurantRepository.save(Restaurant.builder().id(2L).build());
 
+        this.product = this.productRepository.save(product);
+
         long nbProducts = this.productRepository.count();
 
-        this.product.setId(null);
-        this.product.setRestaurant(restaurant);
-        this.productRepository.save(product);
+        Product product2 = Product.builder()
+                .name("Test product")
+                .price(12.56)
+                .restaurant(restaurant)
+                .category(
+                        Category.builder().id(1L).build()
+                )
+                .build();
+        this.productRepository.save(product2);
 
         assertThat(this.productRepository.count()).isEqualTo(nbProducts + 1);
+        this.productRepository.deleteById(this.product.getId());
+        this.productRepository.deleteById(product2.getId());
+        this.restaurantRepository.deleteById(restaurant.getId());
     }
 
     @Test

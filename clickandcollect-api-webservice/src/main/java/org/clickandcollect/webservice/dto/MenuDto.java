@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Singular;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -29,7 +31,9 @@ public class MenuDto {
     @Min(0)
     @NotNull
     private Double price;
-    @NotNull
+    @Size(min = 1, max = 10)
+    @Singular
+    @Valid
     List<MenuCourseDto> menuCourses = new ArrayList<>();
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long restaurantId;
