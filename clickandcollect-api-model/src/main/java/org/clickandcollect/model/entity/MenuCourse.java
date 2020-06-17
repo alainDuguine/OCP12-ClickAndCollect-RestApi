@@ -49,7 +49,7 @@ public class MenuCourse {
     public String toString() {
         return "MenuCourse{" +
                 "id=" + id +
-                ", productsInMenu=" + productsInCourse +
+                ", productsInCourse=" + productsInCourse +
                 ", category=" + category +
                 '}';
     }

@@ -19,6 +19,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Builder
 @JsonInclude(Include.NON_EMPTY)
 public class ProductDto {
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     @NotNull
     @Size(max = 100)

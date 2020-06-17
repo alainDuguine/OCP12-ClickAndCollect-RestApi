@@ -34,7 +34,7 @@ public interface MenuMapper {
     List<MenuCourseDto> listMenuCourseToListDto(List<MenuCourse> menuCourses);
 
     @Mapping(target = "productId", ignore = true)
-    ProductInCourseDto productInMenuToDto(ProductInCourse productInCourse);
+    ProductInCourseDto productInCourseToDto(ProductInCourse productInCourse);
 
     @Mapping(target = "menuCourse", ignore = true)
     @Mapping(target = "product.id", source = "productId")

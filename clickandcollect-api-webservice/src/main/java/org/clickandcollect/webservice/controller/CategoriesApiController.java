@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(CategoriesApiController.RESOURCE_URL)
+@RequestMapping("/categories")
 @Slf4j
 public class CategoriesApiController {
-
-    public static final String RESOURCE_URL = "/categories";
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
@@ -26,7 +24,7 @@ public class CategoriesApiController {
         this.categoryMapper = categoryMapper;
     }
 
-    @GetMapping("")
+    @GetMapping()
     public ResponseEntity<List<CategoryDto>> getCategories(){
         log.info("Request for categories, returning '{}' results", this.categoryRepository.count());
         return ResponseEntity.ok(categoryMapper.categoryListToDtoList(categoryRepository.findAll()));

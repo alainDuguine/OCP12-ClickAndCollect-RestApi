@@ -29,7 +29,7 @@ public class ProductInCourse {
 
     @Override
     public String toString() {
-        return "ProductInMenu{" +
+        return "ProductInCourse{" +
                 "id=" + id +
                 ", extraCost=" + extraCost +
                 ", product=" + product +
