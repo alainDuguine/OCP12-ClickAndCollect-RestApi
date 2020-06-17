@@ -57,6 +57,7 @@ public class MenuServiceImpl implements MenuService {
                             new UnknownResourceException("Unknown Category '" + categoryName + "'")
                     );
             log.info("Category name '{}' found", category);
+            // creation des associations entre menuCourse et menu
             menuCourse.setMenu(menu);
             menuCourse.setCategory(category);
             menu.getMenuCourses().set(i, menuCourse);
@@ -71,6 +72,7 @@ public class MenuServiceImpl implements MenuService {
                                 new UnknownResourceException("Unknown Product '" + productInCourse.getProduct().getId() + "'")
                         );
                 log.info("Product id '{}' for restaurant '{}' found", product.getId(), restaurantId);
+                // creation des associations entre productInCourse et MenuCourse
                 productInCourse.setProduct(product);
                 productInCourse.setMenuCourse(menuCourse);
                 menuCourse.getProductsInCourse().set(j, productInCourse);

@@ -21,12 +21,10 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = MenusApiController.RESOURCE_URL)
+@RequestMapping("/restaurants/{restaurantId}/menus")
 @CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
 public class MenusApiController {
-
-    public static final String RESOURCE_URL = "/restaurants/{restaurantId}/menus";
 
     private final MenuService menuService;
     private final MenuMapper menuMapper;
