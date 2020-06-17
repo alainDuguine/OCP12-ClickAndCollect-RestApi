@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -36,6 +38,13 @@ public class AuthenticationApiController {
         Restaurant restaurant = this.authenticationService.register(this.restaurantMapper.registerFormToRestaurant(registerForm));
         log.info("Restaurant '{}' created", restaurant.getId());
         return new ResponseEntity<>(this.restaurantMapper.restaurantToRestaurantDto(restaurant), HttpStatus.CREATED);
+    }
+
+    @RequestMapping(method = RequestMethod.HEAD, value = "register")
+    public ResponseEntity<Void> emailExists(@RequestParam(value = "email") String email) {
+        log.info("Checking if email '{}' is present in database", email);
+        this.authenticationService.checkEmailExists(email);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

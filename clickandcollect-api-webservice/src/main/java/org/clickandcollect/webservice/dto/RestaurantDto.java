@@ -18,12 +18,12 @@ public class RestaurantDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     @NotNull
+    @Size(min = 3, max = 100)
+    private String name;
+    @NotNull
     @Email
     private String email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Size(min = 6)
     private String password;
-    @NotNull
-    @Size(min = 3, max = 100)
-    private String name;
 }
