@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.clickandcollect.business.exception.ResourceDuplicationException;
 import org.clickandcollect.business.exception.UnknownResourceException;
 import org.clickandcollect.webservice.dto.ApiError;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
@@ -26,17 +26,17 @@ public class ExceptionControllerAdvice {
     public static final String LOGMSG = "Catching {} for {}";
 
     @ExceptionHandler({UnknownResourceException.class})
-    public ResponseEntity<Object> unknownResource(Exception ex, WebRequest request) {
+    public ResponseEntity<Object> unknownResource(Exception ex) {
         return buildError(ex, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({ResourceDuplicationException.class})
+    @ExceptionHandler({ResourceDuplicationException.class, DataIntegrityViolationException.class})
     public ResponseEntity<Object> uniqueConstraintException(Exception ex) {
         return buildError(ex, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
-    public ResponseEntity<Object> validationException(MethodArgumentNotValidException ex, WebRequest request) {
+    public ResponseEntity<Object> validationException(MethodArgumentNotValidException ex) {
         log.warn(LOGMSG, ex.getClass(), ex.getMessage());
         Map<String, String> mapErrors = new HashMap<>();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
@@ -56,7 +56,7 @@ public class ExceptionControllerAdvice {
 
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
-    public ResponseEntity<Object> badlyFormattedArgument(MethodArgumentTypeMismatchException ex, WebRequest request) {
+    public ResponseEntity<Object> badlyFormattedArgument(MethodArgumentTypeMismatchException ex) {
         log.warn(LOGMSG, ex.getClass(), ex.getMessage());
         Map<String, String> mapErrors = new HashMap<>();
         mapErrors.put(ex.getName(),ex.getMessage());

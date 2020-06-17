@@ -2,6 +2,7 @@ package org.clickandcollect.business.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.clickandcollect.business.contract.MenuService;
+import org.clickandcollect.business.exception.ResourceDuplicationException;
 import org.clickandcollect.business.exception.UnknownResourceException;
 import org.clickandcollect.consumer.repository.CategoryRepository;
 import org.clickandcollect.consumer.repository.MenuRepository;
@@ -13,6 +14,7 @@ import org.clickandcollect.model.entity.MenuCourse;
 import org.clickandcollect.model.entity.Product;
 import org.clickandcollect.model.entity.ProductInCourse;
 import org.clickandcollect.model.entity.Restaurant;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -78,7 +80,11 @@ public class MenuServiceImpl implements MenuService {
                 menuCourse.getProductsInCourse().set(j, productInCourse);
             }
         }
-        return menuRepository.save(menu);
+        try {
+            return this.menuRepository.save(menu);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResourceDuplicationException("Menu '" + menu.getName() + "' already exists for restaurant '" + restaurantId + "'");
+        }
     }
 
     @Override
