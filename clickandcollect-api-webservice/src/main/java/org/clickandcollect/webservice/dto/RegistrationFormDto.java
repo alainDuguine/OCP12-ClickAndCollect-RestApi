@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class RegisterFormDto {
+public class RegistrationFormDto {
     @NotNull
     @Size(min = 3, max = 100)
     private String name;

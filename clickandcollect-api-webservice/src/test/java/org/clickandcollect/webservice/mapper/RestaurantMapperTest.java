@@ -1,7 +1,7 @@
 package org.clickandcollect.webservice.mapper;
 
 import org.clickandcollect.model.entity.Restaurant;
-import org.clickandcollect.webservice.dto.RegisterFormDto;
+import org.clickandcollect.webservice.dto.RegistrationFormDto;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -13,16 +13,16 @@ public class RestaurantMapperTest {
 
     @Test
     void givenRegisterForm_whenMappingToRestaurantModel_thenGetValidObject() {
-        RegisterFormDto registerFormDto = RegisterFormDto.builder()
+        RegistrationFormDto registrationFormDto = RegistrationFormDto.builder()
                 .name("Test")
                 .email("m@ail.com")
                 .password("password")
                 .build();
 
-        Restaurant restaurant = this.restaurantMapper.registerFormToRestaurant(registerFormDto);
+        Restaurant restaurant = this.restaurantMapper.registerFormToRestaurant(registrationFormDto);
 
-        assertThat(restaurant.getName()).isEqualTo(registerFormDto.getName());
-        assertThat(restaurant.getEmail()).isEqualTo(registerFormDto.getEmail());
-        assertThat(restaurant.getPassword()).isEqualTo(registerFormDto.getPassword());
+        assertThat(restaurant.getName()).isEqualTo(registrationFormDto.getName());
+        assertThat(restaurant.getEmail()).isEqualTo(registrationFormDto.getEmail());
+        assertThat(restaurant.getPassword()).isEqualTo(registrationFormDto.getPassword());
     }
 }

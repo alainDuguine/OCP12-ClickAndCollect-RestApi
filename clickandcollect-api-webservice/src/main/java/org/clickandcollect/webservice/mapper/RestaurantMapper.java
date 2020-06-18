@@ -1,7 +1,7 @@
 package org.clickandcollect.webservice.mapper;
 
 import org.clickandcollect.model.entity.Restaurant;
-import org.clickandcollect.webservice.dto.RegisterFormDto;
+import org.clickandcollect.webservice.dto.RegistrationFormDto;
 import org.clickandcollect.webservice.dto.RestaurantDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,7 +14,7 @@ public interface RestaurantMapper {
     @Mapping(target = "products", ignore = true)
     @Mapping(target = "menus", ignore = true)
     @Mapping(target = "id", ignore = true)
-    Restaurant registerFormToRestaurant(RegisterFormDto registerForm);
+    Restaurant registerFormToRestaurant(RegistrationFormDto registerForm);
 
     @Mapping(target = "menus", ignore = true)
     @Mapping(target = "products", ignore = true)
