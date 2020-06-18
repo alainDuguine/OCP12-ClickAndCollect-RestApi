@@ -1,7 +1,7 @@
 package org.clickandcollect.webservice.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.clickandcollect.business.contract.RestaurantService;
+import org.clickandcollect.business.contract.ProductService;
 import org.clickandcollect.model.entity.Product;
 import org.clickandcollect.webservice.dto.ProductDto;
 import org.clickandcollect.webservice.mapper.ProductMapper;
@@ -25,13 +25,13 @@ import java.util.List;
 @RequestMapping("/restaurants/{restaurantId}/products")
 @CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
-public class RestaurantsApiController {
+public class ProductsApiController {
 
-    private final RestaurantService restaurantService;
+    private final ProductService productService;
     private final ProductMapper productMapper;
 
-    public RestaurantsApiController(RestaurantService restaurantService, ProductMapper productMapper) {
-        this.restaurantService = restaurantService;
+    public ProductsApiController(ProductService productService, ProductMapper productMapper) {
+        this.productService = productService;
         this.productMapper = productMapper;
     }
 
@@ -39,7 +39,7 @@ public class RestaurantsApiController {
     public ResponseEntity<List<ProductDto>> getProducts(@RequestParam(value = "category", required = false) String category,
                                                         @PathVariable Long restaurantId) {
         log.info("Retrieving list of products for restaurant id '{}'", restaurantId);
-        List<Product> products = this.restaurantService.findProductsByRestaurantId(restaurantId, category);
+        List<Product> products = this.productService.findProductsByRestaurantId(restaurantId, category);
         log.info("{} products found", products.size());
         return new ResponseEntity<>(this.productMapper.listProductToListProductDto(products), HttpStatus.OK);
     }
@@ -48,7 +48,7 @@ public class RestaurantsApiController {
     public ResponseEntity<ProductDto> getProduct(@PathVariable Long restaurantId,
                                                   @PathVariable Long productId) {
         log.info("Retrieving the product '{}' for restaurant id '{}'", productId, restaurantId);
-        Product product = this.restaurantService.findProductByIds(restaurantId, productId);
+        Product product = this.productService.findProductByIds(restaurantId, productId);
         log.info("Product '{}' found", product.getId());
         return new ResponseEntity<>(this.productMapper.productToProductDto(product), HttpStatus.OK);
     }
@@ -57,7 +57,7 @@ public class RestaurantsApiController {
     public ResponseEntity<ProductDto> addProduct(@PathVariable Long restaurantId,
                                                  @Valid @RequestBody ProductDto productDto) {
         log.info("Adding a new product to restaurant id '{}'", restaurantId);
-        Product product = this.restaurantService.saveProduct(restaurantId, this.productMapper.productDtoToProduct(productDto));
+        Product product = this.productService.saveProduct(restaurantId, this.productMapper.productDtoToProduct(productDto));
         log.info("Product '{}' created", product.getId());
         return new ResponseEntity<>(this.productMapper.productToProductDto(product), HttpStatus.CREATED);
     }
@@ -67,7 +67,7 @@ public class RestaurantsApiController {
                                                     @PathVariable Long productId,
                                                     @Valid @RequestBody ProductDto productDto) {
         log.info("Updating product id '{}' for restaurant id '{}'", productId, restaurantId);
-        Product product = this.restaurantService.updateProduct(
+        Product product = this.productService.updateProduct(
                 restaurantId,
                 productId,
                 this.productMapper.productDtoToProduct(productDto)
@@ -80,7 +80,7 @@ public class RestaurantsApiController {
     public ResponseEntity<Void> deleteProduct(@PathVariable Long restaurantId,
                                               @PathVariable Long productId) {
         log.info("Delete product id '{}' for restaurant id '{}'", productId, restaurantId);
-        this.restaurantService.deleteProduct(restaurantId, productId);
+        this.productService.deleteProduct(restaurantId, productId);
         log.info("Product '{}' deleted", productId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

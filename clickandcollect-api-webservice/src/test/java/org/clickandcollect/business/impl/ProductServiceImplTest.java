@@ -28,7 +28,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class RestaurantServiceImplTest {
+public class ProductServiceImplTest {
 
     @Mock
     private RestaurantRepository restaurantRepository;
@@ -38,7 +38,7 @@ public class RestaurantServiceImplTest {
     private CategoryRepository categoryRepository;
 
     @InjectMocks
-    private RestaurantServiceImpl restaurantService;
+    private ProductServiceImpl restaurantService;
 
     Restaurant restaurant;
     Product product;

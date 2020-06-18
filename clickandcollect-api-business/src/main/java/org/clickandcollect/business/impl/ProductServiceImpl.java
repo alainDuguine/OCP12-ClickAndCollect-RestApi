@@ -1,7 +1,7 @@
 package org.clickandcollect.business.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.clickandcollect.business.contract.RestaurantService;
+import org.clickandcollect.business.contract.ProductService;
 import org.clickandcollect.business.exception.ResourceDuplicationException;
 import org.clickandcollect.business.exception.UnknownResourceException;
 import org.clickandcollect.consumer.repository.CategoryRepository;
@@ -18,13 +18,13 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class RestaurantServiceImpl implements RestaurantService {
+public class ProductServiceImpl implements ProductService {
 
     private final RestaurantRepository restaurantRepository;
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductServiceImpl(RestaurantRepository restaurantRepository, ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.restaurantRepository = restaurantRepository;
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
