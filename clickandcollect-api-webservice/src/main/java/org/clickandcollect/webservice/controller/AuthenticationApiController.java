@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,10 +42,17 @@ public class AuthenticationApiController {
     }
 
     @GetMapping("register")
-    public ResponseEntity<Boolean> emailExists(@RequestParam(value = "email") String email) {
+    public ResponseEntity<Boolean> emailExistsBoolean(@RequestParam(value = "email") String email) {
         log.info("Checking if email '{}' is present in database", email);
-        boolean response = this.authenticationService.checkEmailExists(email);
+        boolean response = this.authenticationService.checkEmailExistsBoolean(email);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.HEAD, value="register")
+    public ResponseEntity<Void> emailExists(@RequestParam(value = "email") String email) {
+        log.info("Checking if email '{}' is present in database", email);
+        this.authenticationService.checkEmailExists(email);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
