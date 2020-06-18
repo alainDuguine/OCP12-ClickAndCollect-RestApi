@@ -25,14 +25,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-class ProductsApiControllerTest {
+class ProductApiControllerTest {
 
     @Mock
     private ProductService productService;
     @Mock
     private ProductMapper productMapper;
     @InjectMocks
-    private ProductsApiController controller;
+    private ProductApiController controller;
 
     MockMvc mockMvc;
 

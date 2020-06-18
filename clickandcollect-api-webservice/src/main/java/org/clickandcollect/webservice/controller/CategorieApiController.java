@@ -14,12 +14,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/categories")
 @Slf4j
-public class CategoriesApiController {
+public class CategorieApiController {
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
-    public CategoriesApiController(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
+    public CategorieApiController(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
     }

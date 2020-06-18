@@ -11,6 +11,11 @@ public interface RestaurantMapper {
 
     RestaurantDto restaurantToRestaurantDto(Restaurant restaurant);
 
+    @Mapping(target = "typeCuisine", ignore = true)
+    @Mapping(target = "longitude", ignore = true)
+    @Mapping(target = "latitude", ignore = true)
+    @Mapping(target = "formattedAddress", ignore = true)
+    @Mapping(target = "description", ignore = true)
     @Mapping(target = "products", ignore = true)
     @Mapping(target = "menus", ignore = true)
     @Mapping(target = "id", ignore = true)

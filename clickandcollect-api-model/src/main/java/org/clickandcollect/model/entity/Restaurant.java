@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +26,22 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true)
+    @NotNull
     private String email;
+    @Size(min = 6)
+    @NotNull
     private String password;
+    @Column(length = 100)
+    @NotNull
     private String name;
+    @Column(length = 100)
+    private String typeCuisine;
+    private String description;
+    private String formattedAddress;
+    private String latitude;
+    private String longitude;
+
+
     @OneToMany(
             mappedBy = "restaurant",
             orphanRemoval = true,

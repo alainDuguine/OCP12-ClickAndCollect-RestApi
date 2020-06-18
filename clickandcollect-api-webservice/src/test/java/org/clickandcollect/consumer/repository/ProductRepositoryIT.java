@@ -72,7 +72,11 @@ class ProductRepositoryIT {
 
     @Test
     void givenDuplicateProductNameWithDifferentRestaurantId_whenAddNewProduct_shouldBePersistedToDatabase(){
-        Restaurant restaurant = this.restaurantRepository.save(Restaurant.builder().id(2L).build());
+        Restaurant restaurant = this.restaurantRepository.save(Restaurant.builder()
+                .id(2L)
+                .name("test Name")
+                .password("password")
+                .email("email@example.com").build());
 
         this.product = this.productRepository.save(product);
 

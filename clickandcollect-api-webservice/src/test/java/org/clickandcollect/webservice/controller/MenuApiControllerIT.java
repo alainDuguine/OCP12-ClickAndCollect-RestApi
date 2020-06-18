@@ -28,14 +28,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-public class MenusApiControllerIT {
+public class MenuApiControllerIT {
 
     @Mock
     private MenuService menuService;
     @Mock
     private MenuMapper menuMapper;
     @InjectMocks
-    private MenusApiController controller;
+    private MenuApiController controller;
 
     MockMvc mockMvc;
 

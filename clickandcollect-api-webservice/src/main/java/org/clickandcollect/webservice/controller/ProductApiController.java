@@ -25,12 +25,12 @@ import java.util.List;
 @RequestMapping("/restaurants/{restaurantId}/products")
 @CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
-public class ProductsApiController {
+public class ProductApiController {
 
     private final ProductService productService;
     private final ProductMapper productMapper;
 
-    public ProductsApiController(ProductService productService, ProductMapper productMapper) {
+    public ProductApiController(ProductService productService, ProductMapper productMapper) {
         this.productService = productService;
         this.productMapper = productMapper;
     }

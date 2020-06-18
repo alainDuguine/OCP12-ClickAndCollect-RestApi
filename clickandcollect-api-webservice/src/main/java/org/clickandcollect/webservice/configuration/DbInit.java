@@ -45,7 +45,18 @@ public class DbInit implements CommandLineRunner {
             this.categoryRepository.saveAll(categories);
             this.categoryRepository.findAll().forEach(el -> log.info(el.getName()));
 
-            Restaurant restaurant = this.restaurantRepository.save(Restaurant.builder().build());
+            Restaurant restaurant = Restaurant.builder()
+                    .name("Chez Monique & Myrtille")
+                    .email("em@il.com")
+                    .password("p@ssword")
+                    .description("La meilleure cantine du quartie Gambetta !")
+                    .typeCuisine("Cuisine du jour fraîche et du marché")
+                    .formattedAddress("83 Rue Orfila")
+                    .latitude("48.868028")
+                    .longitude("2.399884")
+                    .build();
+
+            restaurant = this.restaurantRepository.save(restaurant);
             Category entree = this.categoryRepository.findCategoryByName("Entrée").get();
             Category plat = this.categoryRepository.findCategoryByName("Plat").get();
             Category dessert = this.categoryRepository.findCategoryByName("Dessert").get();

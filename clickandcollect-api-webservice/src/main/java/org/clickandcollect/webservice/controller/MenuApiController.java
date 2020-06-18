@@ -24,12 +24,12 @@ import java.util.List;
 @RequestMapping("/restaurants/{restaurantId}/menus")
 @CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
-public class MenusApiController {
+public class MenuApiController {
 
     private final MenuService menuService;
     private final MenuMapper menuMapper;
 
-    public MenusApiController(MenuService menuService, MenuMapper menuMapper) {
+    public MenuApiController(MenuService menuService, MenuMapper menuMapper) {
         this.menuService = menuService;
         this.menuMapper = menuMapper;
     }
