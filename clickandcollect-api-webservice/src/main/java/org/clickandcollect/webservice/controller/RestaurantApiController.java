@@ -9,8 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/restaurants")
@@ -30,6 +34,18 @@ public class RestaurantApiController {
         log.info("Retrieving the restaurant '{}'", restaurantId);
         Restaurant restaurant = this.restaurantService.findRestaurantById(restaurantId);
         log.info("Restaurant '{}' found", restaurant.getId());
+        return new ResponseEntity<>(this.restaurantMapper.restaurantToRestaurantDto(restaurant), HttpStatus.OK);
+    }
+
+    @PutMapping("{restaurantId}")
+    public ResponseEntity<RestaurantDto> updateRestaurant(@PathVariable Long restaurantId,
+                                                          @Valid @RequestBody RestaurantDto restaurantDto) {
+        log.info("Updating restaurant id '{}'", restaurantId);
+        Restaurant restaurant = this.restaurantService.updateRestaurant(
+                restaurantId,
+                this.restaurantMapper.restaurantDtoToRestaurant(restaurantDto)
+        );
+        log.info("Restaurant '{}' updated", restaurantId);
         return new ResponseEntity<>(this.restaurantMapper.restaurantToRestaurantDto(restaurant), HttpStatus.OK);
     }
 }

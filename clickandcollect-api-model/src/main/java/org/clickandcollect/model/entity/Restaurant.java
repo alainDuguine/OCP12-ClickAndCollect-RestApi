@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -45,12 +46,14 @@ public class Restaurant {
     @OneToMany(
             mappedBy = "restaurant",
             orphanRemoval = true,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<>();
     @OneToMany(
             mappedBy = "restaurant",
             orphanRemoval = true,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
     private List<Menu> menus = new ArrayList<>();
 
     @Override

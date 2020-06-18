@@ -4,4 +4,5 @@ import org.clickandcollect.model.entity.Restaurant;
 
 public interface RestaurantService {
     Restaurant findRestaurantById(Long restaurantId);
+    Restaurant updateRestaurant(Long restaurantId, Restaurant restaurant);
 }
