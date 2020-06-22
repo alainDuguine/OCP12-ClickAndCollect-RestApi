@@ -37,7 +37,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurantInDb.setFormattedAddress(restaurant.getFormattedAddress());
         restaurantInDb.setLatitude(restaurant.getLatitude());
         restaurantInDb.setLongitude(restaurant.getLongitude());
+        restaurantInDb.addAllBusinessHours(restaurant.getBusinessHours());
         return this.restaurantRepository.save(restaurantInDb);
-
     }
 }

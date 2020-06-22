@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -35,4 +37,5 @@ public class RestaurantDto {
     private String formattedAddress;
     private String latitude;
     private String longitude;
+    private List<BusinessHourDto> businessHours = new ArrayList<>();
 }

@@ -42,19 +42,36 @@ public class Restaurant {
     private String latitude;
     private String longitude;
 
-
     @OneToMany(
             mappedBy = "restaurant",
             orphanRemoval = true,
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<>();
+
     @OneToMany(
             mappedBy = "restaurant",
             orphanRemoval = true,
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<Menu> menus = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "restaurant",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+    private List<BusinessHour> businessHours = new ArrayList<>();
+
+    public void addBusinessHour(BusinessHour businessHour) {
+        this.businessHours.add(businessHour);
+        businessHour.setRestaurant(this);
+    }
+
+    public void addAllBusinessHours(List<BusinessHour> businessHours) {
+        this.businessHours.clear();
+        businessHours.forEach(this::addBusinessHour);
+    }
 
     @Override
     public String toString() {

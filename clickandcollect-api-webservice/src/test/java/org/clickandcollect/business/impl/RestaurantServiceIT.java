@@ -2,6 +2,7 @@ package org.clickandcollect.business.impl;
 
 import org.clickandcollect.business.contract.RestaurantService;
 import org.clickandcollect.consumer.repository.RestaurantRepository;
+import org.clickandcollect.model.entity.BusinessHour;
 import org.clickandcollect.model.entity.Restaurant;
 import org.clickandcollect.webservice.ClickAndCollectApiApplication;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -68,6 +73,40 @@ public class RestaurantServiceIT {
         assertThat(restaurantUpdate.getFormattedAddress()).isNull();
         assertThat(restaurantUpdate.getLatitude()).isNull();
         assertThat(restaurantUpdate.getLongitude()).isNull();
-
     }
+
+    @Test
+    @Transactional
+    public void givenRestaurantWithBusinessHours_whenUpdateRestaurant_shouldPersistWithGoodValues() {
+        Restaurant restaurant = this.restaurantRepository.findById(1L).get();
+
+        BusinessHour businessHour = BusinessHour.builder()
+                .startDay(DayOfWeek.MONDAY)
+                .endDay(DayOfWeek.FRIDAY)
+                .startTime(LocalTime.of(8,0))
+                .endTime(LocalTime.of(18,0))
+                .build();
+
+        BusinessHour businessHour1 = BusinessHour.builder()
+                .startDay(DayOfWeek.SATURDAY)
+                .endDay(DayOfWeek.SUNDAY)
+                .startTime(LocalTime.of(11,30))
+                .endTime(LocalTime.of(15,30))
+                .build();
+
+        List<BusinessHour> businessHours = new ArrayList<>();
+        businessHours.add(businessHour);
+        businessHours.add(businessHour1);
+
+        restaurant.setBusinessHours(businessHours);
+
+        Restaurant restaurantAfterUpdate = this.restaurantService.updateRestaurant(restaurant.getId(), restaurant);
+
+        assertThat(restaurantAfterUpdate.getBusinessHours()).isEqualTo(businessHours);
+
+        Restaurant restaurant1 = this.restaurantService.findRestaurantById(restaurant.getId());
+
+        assertThat(restaurant1.getBusinessHours()).isEqualTo(businessHours);
+    }
+
 }
