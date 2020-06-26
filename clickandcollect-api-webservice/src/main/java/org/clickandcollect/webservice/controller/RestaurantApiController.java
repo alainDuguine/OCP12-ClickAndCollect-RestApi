@@ -9,10 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -47,5 +50,13 @@ public class RestaurantApiController {
         );
         log.info("Restaurant '{}' updated", restaurantId);
         return new ResponseEntity<>(this.restaurantMapper.restaurantToRestaurantDto(restaurant), HttpStatus.OK);
+    }
+
+    @PostMapping("{restaurantId}/upload")
+    public ResponseEntity<Void> uploadPhoto(@RequestParam("photo")MultipartFile photo, @PathVariable Long restaurantId) {
+        log.info("Uploading photo for restaurant id '{}'", restaurantId);
+        this.restaurantService.uploadPhotoRestaurant(restaurantId, photo);
+        log.info("Photo uploaded for restaurabt id '{}", restaurantId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

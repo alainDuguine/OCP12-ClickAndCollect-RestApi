@@ -1,6 +1,7 @@
 package org.clickandcollect.webservice.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.clickandcollect.business.exception.FileHandlingException;
 import org.clickandcollect.business.exception.ResourceDuplicationException;
 import org.clickandcollect.business.exception.UnknownResourceException;
 import org.clickandcollect.webservice.dto.ApiError;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +36,11 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler({ResourceDuplicationException.class, DataIntegrityViolationException.class})
     public ResponseEntity<Object> uniqueConstraintException(Exception ex) {
         return buildError(ex, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler({FileHandlingException.class, MissingServletRequestPartException.class, MaxUploadSizeExceededException.class})
+    public ResponseEntity<Object> fileHandlingException(Exception ex) {
+        return buildError(ex, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})

@@ -41,6 +41,7 @@ public class Restaurant {
     private String formattedAddress;
     private String latitude;
     private String longitude;
+    private String photo;
 
     @OneToMany(
             mappedBy = "restaurant",
