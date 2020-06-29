@@ -53,10 +53,10 @@ public class RestaurantApiController {
     }
 
     @PostMapping("{restaurantId}/upload")
-    public ResponseEntity<Void> uploadPhoto(@RequestParam("photo")MultipartFile photo, @PathVariable Long restaurantId) {
+    public ResponseEntity<RestaurantDto> uploadPhoto(@RequestParam("photo")MultipartFile photo, @PathVariable Long restaurantId) {
         log.info("Uploading photo for restaurant id '{}'", restaurantId);
-        this.restaurantService.uploadPhotoRestaurant(restaurantId, photo);
-        log.info("Photo uploaded for restaurabt id '{}", restaurantId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Restaurant restaurant = this.restaurantService.uploadPhotoRestaurant(restaurantId, photo);
+        log.info("Photo uploaded for restaurant id '{}'", restaurantId);
+        return new ResponseEntity<>(this.restaurantMapper.restaurantToRestaurantDto(restaurant), HttpStatus.OK);
     }
 }

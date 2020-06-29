@@ -6,5 +6,5 @@ import org.springframework.web.multipart.MultipartFile;
 public interface RestaurantService {
     Restaurant findRestaurantById(Long restaurantId);
     Restaurant updateRestaurant(Long restaurantId, Restaurant restaurant);
-    void uploadPhotoRestaurant(Long restaurantId, MultipartFile photo);
+    Restaurant uploadPhotoRestaurant(Long restaurantId, MultipartFile photo);
 }

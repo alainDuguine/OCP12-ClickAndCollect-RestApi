@@ -38,4 +38,5 @@ public class RestaurantDto {
     private String latitude;
     private String longitude;
     private List<BusinessHourDto> businessHours = new ArrayList<>();
+    private String photo;
 }

@@ -54,7 +54,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public void uploadPhotoRestaurant(Long restaurantId, MultipartFile photo) {
+    public Restaurant uploadPhotoRestaurant(Long restaurantId, MultipartFile photo) {
         log.info("Retrieving restaurant id '{}' for photo upload", restaurantId);
         Restaurant restaurantInDb = this.restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new UnknownResourceException("Unknown restaurant '" + restaurantId + "'"));
@@ -66,12 +66,13 @@ public class RestaurantServiceImpl implements RestaurantService {
             } else {
                 extension = "jpg";
             }
-            restaurantInDb.setPhoto(restaurantId + "." + extension);
+            String photoPath = pathPhotoStorage + restaurantId + "." + extension;
+            restaurantInDb.setPhoto(photoPath);
             log.info("Setting photo name '{}'", restaurantInDb.getPhoto());
             try {
-                String photoPath = pathPhotoStorage + restaurantInDb.getPhoto();
                 Files.write(Paths.get(photoPath), photo.getBytes());
-                log.info("Photo wrote on disk to '{}'", pathPhotoStorage);
+                log.info("Photo wrote on disk to '{}'", photoPath);
+                return this.restaurantRepository.save(restaurantInDb);
             } catch (IOException e) {
                 throw new FileHandlingException("Could not write file on disk");
             }
