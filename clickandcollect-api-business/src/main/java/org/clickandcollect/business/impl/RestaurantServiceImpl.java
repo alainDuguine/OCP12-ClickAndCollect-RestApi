@@ -67,17 +67,36 @@ public class RestaurantServiceImpl implements RestaurantService {
                 extension = "jpg";
             }
             String photoPath = pathPhotoStorage + restaurantId + "." + extension;
-            restaurantInDb.setPhoto(photoPath);
+            String bkpUrl = "";
             log.info("Setting photo name '{}'", restaurantInDb.getPhoto());
             try {
+                if (restaurantInDb.getPhoto() != null) {
+                    bkpUrl = restaurantInDb.getPhoto() + ".bkp";
+                    Files.move(Paths.get(restaurantInDb.getPhoto()), Paths.get(bkpUrl));
+                }
                 Files.write(Paths.get(photoPath), photo.getBytes());
                 log.info("Photo wrote on disk to '{}'", photoPath);
+                if(!bkpUrl.isEmpty()) {
+                    Files.delete(Paths.get(bkpUrl));
+                }
+                restaurantInDb.setPhoto(photoPath);
                 return this.restaurantRepository.save(restaurantInDb);
             } catch (IOException e) {
+                if (!bkpUrl.isEmpty()) {
+                    recoverFile(bkpUrl);
+                }
                 throw new FileHandlingException("Could not write file on disk");
             }
         } else {
             throw new FileHandlingException("Photo is not of the appropriate format");
+        }
+    }
+
+    private void recoverFile(String bkpUrl) {
+        try {
+            Files.move(Paths.get(bkpUrl), Paths.get(bkpUrl.replace(".bkp", "")));
+        } catch (IOException e) {
+            throw new FileHandlingException("File could'nt be recovered");
         }
     }
 }
