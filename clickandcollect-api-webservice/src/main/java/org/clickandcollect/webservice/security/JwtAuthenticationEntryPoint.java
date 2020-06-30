@@ -1,5 +1,6 @@
 package org.clickandcollect.webservice.security;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         if (authException.getMessage().equals("Bad credentials")) {
             message = "BAD_CREDENTIALS";
+            throw new BadCredentialsException(message);
         }
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, message != null ? message: authException.getMessage());
     }

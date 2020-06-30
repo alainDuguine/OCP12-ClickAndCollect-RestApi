@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -37,6 +38,11 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler({ResourceDuplicationException.class, DataIntegrityViolationException.class})
     public ResponseEntity<Object> uniqueConstraintException(Exception ex) {
         return buildError(ex, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler({BadCredentialsException.class})
+    public ResponseEntity<Object> badCredentials(Exception ex) {
+        return buildError(ex, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler({FileHandlingException.class, MissingServletRequestPartException.class, MaxUploadSizeExceededException.class})
