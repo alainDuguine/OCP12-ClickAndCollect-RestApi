@@ -3,6 +3,8 @@ package org.clickandcollect.webservice.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.clickandcollect.business.contract.AuthenticationService;
 import org.clickandcollect.model.entity.Restaurant;
+import org.clickandcollect.webservice.dto.AuthToken;
+import org.clickandcollect.webservice.dto.LoginFormDto;
 import org.clickandcollect.webservice.dto.RegistrationFormDto;
 import org.clickandcollect.webservice.dto.RestaurantDto;
 import org.clickandcollect.webservice.mapper.RestaurantMapper;
@@ -37,6 +39,14 @@ public class AuthenticationApiController {
         Restaurant restaurant = this.authenticationService.register(this.restaurantMapper.registerFormToRestaurant(registerForm));
         log.info("Restaurant '{}' created", restaurant.getId());
         return new ResponseEntity<>(this.restaurantMapper.restaurantToRestaurantDto(restaurant), HttpStatus.CREATED);
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<AuthToken> login(@Valid @RequestBody LoginFormDto loginFormDto) {
+        log.info("User login attempt '{}'", loginFormDto.getEmail());
+
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("register")

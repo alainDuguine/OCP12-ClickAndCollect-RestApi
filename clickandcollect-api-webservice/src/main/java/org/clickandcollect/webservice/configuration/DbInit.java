@@ -49,11 +49,12 @@ public class DbInit implements CommandLineRunner {
                     .name("Chez Monique & Myrtille")
                     .email("em@il.com")
                     .password("p@ssword")
-                    .description("La meilleure cantine du quartie Gambetta !")
+                    .description("La meilleure cantine du quartier Gambetta !")
                     .typeCuisine("Cuisine du jour fraîche et du marché")
                     .formattedAddress("83 Rue Orfila, 75020, Paris")
                     .latitude("48.868028")
                     .longitude("2.399884")
+                    .photo("C:\\Users\\alain\\Pictures\\ClickAndCollectPhoto\\1.jpg")
                     .build();
 
             restaurant = this.restaurantRepository.save(restaurant);
