@@ -54,7 +54,7 @@ public class JwtUtil {
 
     private String doGenerateToken(String subject) {
         Claims claims = Jwts.claims().setSubject(subject);
-        claims.put("scopes", Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        claims.put("scopes", Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
 
         return Jwts.builder()
                 .setClaims(claims)

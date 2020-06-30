@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,13 +19,15 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Data @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Restaurant {
+public class Restaurant implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -63,6 +68,62 @@ public class Restaurant {
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<BusinessHour> businessHours = new ArrayList<>();
+
+    @Builder.Default
+    private String roles = "";
+    @Builder.Default
+    private boolean expired = false;
+    @Builder.Default
+    private boolean locked = false;
+    @Builder.Default
+    private boolean enabled = true;
+
+    public boolean hasRole(String role){
+        return this.getRoleList().contains(role);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        this.getRoleList().forEach(role -> {
+            GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
+            authorities.add(authority);
+        });
+        return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    private List<String> getRoleList(){
+        if (this.roles.length() > 0){
+            return Arrays.asList(this.roles.split(","));
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return !expired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !locked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return !expired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
 
     public void addBusinessHour(BusinessHour businessHour) {
         this.businessHours.add(businessHour);

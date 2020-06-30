@@ -7,6 +7,7 @@ import org.clickandcollect.business.exception.UnknownResourceException;
 import org.clickandcollect.consumer.repository.RestaurantRepository;
 import org.clickandcollect.model.entity.Restaurant;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +26,14 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     public RestaurantServiceImpl(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
+    }
+
+
+    @Override
+    public Restaurant findRestaurantByEmail(String email) {
+        log.info("Retrieving restaurant by email '{}'", email);
+        return this.restaurantRepository.findRestaurantByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Unknown restaurant '" + email + "'"));
     }
 
     @Override

@@ -12,6 +12,7 @@ import org.clickandcollect.model.entity.Product;
 import org.clickandcollect.model.entity.ProductInCourse;
 import org.clickandcollect.model.entity.Restaurant;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -25,16 +26,18 @@ public class DbInit implements CommandLineRunner {
     private final RestaurantRepository restaurantRepository;
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public DbInit(CategoryRepository categoryRepository, RestaurantRepository restaurantRepository, ProductRepository productRepository, MenuRepository menuRepository) {
+    public DbInit(CategoryRepository categoryRepository, RestaurantRepository restaurantRepository, ProductRepository productRepository, MenuRepository menuRepository, BCryptPasswordEncoder passwordEncoder) {
         this.categoryRepository = categoryRepository;
         this.restaurantRepository = restaurantRepository;
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         if (categoryRepository.count() == 0) {
             List<Category> categories = new ArrayList<>();
             categories.add(Category.builder().name("Entrée").build());
@@ -48,12 +51,13 @@ public class DbInit implements CommandLineRunner {
             Restaurant restaurant = Restaurant.builder()
                     .name("Chez Monique & Myrtille")
                     .email("em@il.com")
-                    .password("p@ssword")
+                    .password(passwordEncoder.encode("password"))
                     .description("La meilleure cantine du quartier Gambetta !")
                     .typeCuisine("Cuisine du jour fraîche et du marché")
                     .formattedAddress("83 Rue Orfila, 75020, Paris")
                     .latitude("48.868028")
                     .longitude("2.399884")
+                    .roles("ROLE_USER")
                     .photo("C:\\Users\\alain\\Pictures\\ClickAndCollectPhoto\\1.jpg")
                     .build();
 

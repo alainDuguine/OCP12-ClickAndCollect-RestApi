@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,7 +29,7 @@ public class ExceptionControllerAdvice {
 
     public static final String LOGMSG = "Catching {} for {}";
 
-    @ExceptionHandler({UnknownResourceException.class})
+    @ExceptionHandler({UnknownResourceException.class, UsernameNotFoundException.class})
     public ResponseEntity<Object> unknownResource(Exception ex) {
         return buildError(ex, HttpStatus.NOT_FOUND);
     }
@@ -62,7 +63,6 @@ public class ExceptionControllerAdvice {
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
-
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     public ResponseEntity<Object> badlyFormattedArgument(MethodArgumentTypeMismatchException ex) {
         log.warn(LOGMSG, ex.getClass(), ex.getMessage());
@@ -77,10 +77,10 @@ public class ExceptionControllerAdvice {
     }
 
     @ResponseBody
-    private ResponseEntity<Object> buildError(Exception ex, HttpStatus notFound) {
+    private ResponseEntity<Object> buildError(Exception ex, HttpStatus status) {
         log.warn(LOGMSG, ex.getClass(), ex.getMessage());
         ApiError apiError = ApiError.builder()
-                .status(notFound)
+                .status(status)
                 .message(ex.getMessage())
                 .build();
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());

@@ -7,4 +7,5 @@ public interface RestaurantService {
     Restaurant findRestaurantById(Long restaurantId);
     Restaurant updateRestaurant(Long restaurantId, Restaurant restaurant);
     Restaurant uploadPhotoRestaurant(Long restaurantId, MultipartFile photo);
+    Restaurant findRestaurantByEmail(String email);
 }

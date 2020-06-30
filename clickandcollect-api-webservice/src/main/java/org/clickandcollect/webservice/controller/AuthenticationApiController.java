@@ -2,14 +2,20 @@ package org.clickandcollect.webservice.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.clickandcollect.business.contract.AuthenticationService;
+import org.clickandcollect.business.contract.RestaurantService;
 import org.clickandcollect.model.entity.Restaurant;
 import org.clickandcollect.webservice.dto.AuthToken;
 import org.clickandcollect.webservice.dto.LoginFormDto;
 import org.clickandcollect.webservice.dto.RegistrationFormDto;
 import org.clickandcollect.webservice.dto.RestaurantDto;
 import org.clickandcollect.webservice.mapper.RestaurantMapper;
+import org.clickandcollect.webservice.security.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,12 +31,20 @@ import javax.validation.Valid;
 @Slf4j
 public class AuthenticationApiController {
 
-    private final AuthenticationService authenticationService;
-    private final RestaurantMapper restaurantMapper;
+    public static final String BASE_URL = "/auth";
 
-    public AuthenticationApiController(AuthenticationService authenticationService, RestaurantMapper restaurantMapper) {
+    private final AuthenticationService authenticationService;
+    private final RestaurantService restaurantService;
+    private final AuthenticationManager authenticationManager;
+    private final RestaurantMapper restaurantMapper;
+    private final JwtUtil jwtUtil;
+
+    public AuthenticationApiController(AuthenticationService authenticationService, RestaurantService restaurantService, AuthenticationManager authenticationManager, RestaurantMapper restaurantMapper, JwtUtil jwtUtil) {
         this.authenticationService = authenticationService;
+        this.restaurantService = restaurantService;
+        this.authenticationManager = authenticationManager;
         this.restaurantMapper = restaurantMapper;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("register")
@@ -44,9 +58,16 @@ public class AuthenticationApiController {
     @PostMapping("login")
     public ResponseEntity<AuthToken> login(@Valid @RequestBody LoginFormDto loginFormDto) {
         log.info("User login attempt '{}'", loginFormDto.getEmail());
-
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        final Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginFormDto.getEmail(),
+                        loginFormDto.getPassword()
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        final Restaurant restaurant = this.restaurantService.findRestaurantByEmail(loginFormDto.getEmail());
+        final String token = jwtUtil.generateToken(restaurant);
+        return new ResponseEntity<>(new AuthToken(restaurant.getId(), restaurant.getEmail(), token), HttpStatus.OK);
     }
 
     @GetMapping("register")

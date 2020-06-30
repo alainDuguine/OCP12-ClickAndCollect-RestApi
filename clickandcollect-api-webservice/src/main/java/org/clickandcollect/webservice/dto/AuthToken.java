@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class AuthToken {
     private Long id;
+    private String email;
     private String jwt;
 }
