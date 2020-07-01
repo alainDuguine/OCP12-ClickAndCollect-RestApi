@@ -1,6 +1,6 @@
 package org.clickandcollect.webservice.mapper;
 
-import org.clickandcollect.model.entitie.Product;
+import org.clickandcollect.model.entity.Product;
 import org.clickandcollect.webservice.dto.ProductDto;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;

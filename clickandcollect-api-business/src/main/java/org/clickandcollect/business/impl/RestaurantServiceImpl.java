@@ -2,97 +2,110 @@ package org.clickandcollect.business.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.clickandcollect.business.contract.RestaurantService;
-import org.clickandcollect.business.exception.ResourceDuplicationException;
+import org.clickandcollect.business.exception.FileHandlingException;
 import org.clickandcollect.business.exception.UnknownResourceException;
-import org.clickandcollect.consumer.repository.CategoryRepository;
-import org.clickandcollect.consumer.repository.ProductRepository;
 import org.clickandcollect.consumer.repository.RestaurantRepository;
-import org.clickandcollect.model.entitie.Category;
-import org.clickandcollect.model.entitie.Product;
-import org.clickandcollect.model.entitie.Restaurant;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.clickandcollect.model.entity.Restaurant;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Service
 @Slf4j
 public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
-    private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
 
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, ProductRepository productRepository, CategoryRepository categoryRepository) {
+    @Value("${path-photo-storage}")
+    private String pathPhotoStorage;
+
+    public RestaurantServiceImpl(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
-        this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
     }
 
 
     @Override
-    public List<Product> findProductsByRestaurantId(Long restaurantId) {
-        log.info("Retrieving products for restaurant id '{}'", restaurantId);
-        return this.productRepository.findAllByRestaurantId(restaurantId);
+    public Restaurant findRestaurantByEmail(String email) {
+        log.info("Retrieving restaurant by email '{}'", email);
+        return this.restaurantRepository.findRestaurantByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Unknown restaurant '" + email + "'"));
     }
 
     @Override
-    public Product findProductByIds(Long restaurantId, Long productId) {
-        log.info("Retrieving product id '{}' for restaurant id '{}'", productId, restaurantId);
-        return this.productRepository.findProductByIdAndRestaurantId(productId, restaurantId)
-                .orElseThrow(() -> new UnknownResourceException("Unknown product '" + productId + "'for restaurant '" + restaurantId + "'"));
-    }
-
-    @Override
-    public Product saveProduct(Long restaurantId, Product product) {
+    public Restaurant findRestaurantById(Long restaurantId) {
         log.info("Retrieving restaurant id '{}'", restaurantId);
-        if(this.restaurantRepository.findById(restaurantId).isPresent()){
-            log.info("Restaurant id '{}' found", restaurantId);
-            product.setRestaurant(Restaurant.builder().id(restaurantId).build());
-            log.info("Retrieving category '{}'", product.getCategory().getName());
-            Optional<Category> category = this.categoryRepository.findCategoryByName(product.getCategory().getName());
-            if (category.isPresent()){
-                log.info("Category found with id '{}'", category.get().getId());
-                product.setCategory(category.get());
-                try {
-                    product = this.productRepository.save(product);
-                    log.info("Product id '{}' saved to database", product.getId());
-                } catch (DataIntegrityViolationException e) {
-                    throw new ResourceDuplicationException("Product name '" + product.getName() + "' already exists");
-                }
+        return this.restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new UnknownResourceException("Unknown restaurant '" + restaurantId + "'")
+        );
+    }
+
+    @Override
+    public Restaurant updateRestaurant(Long restaurantId, Restaurant restaurant) {
+        log.info("Retrieving restaurant id '{}' for update", restaurantId);
+        Restaurant restaurantInDb = this.restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new UnknownResourceException("Unknown restaurant '" + restaurantId + "'"));
+        log.info("Restaurant found");
+        restaurantInDb.setName(restaurant.getName());
+        restaurantInDb.setDescription(restaurant.getDescription());
+        restaurantInDb.setTypeCuisine(restaurant.getTypeCuisine());
+        restaurantInDb.setFormattedAddress(restaurant.getFormattedAddress());
+        restaurantInDb.setLatitude(restaurant.getLatitude());
+        restaurantInDb.setLongitude(restaurant.getLongitude());
+        if (restaurant.getBusinessHours() != null) {
+            restaurantInDb.addAllBusinessHours(restaurant.getBusinessHours());
+        }
+        return this.restaurantRepository.save(restaurantInDb);
+    }
+
+    @Override
+    public Restaurant uploadPhotoRestaurant(Long restaurantId, MultipartFile photo) {
+        log.info("Retrieving restaurant id '{}' for photo upload", restaurantId);
+        Restaurant restaurantInDb = this.restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new UnknownResourceException("Unknown restaurant '" + restaurantId + "'"));
+        log.info("Restaurant found");
+        if (photo != null && photo.getContentType() != null && photo.getContentType().toLowerCase().startsWith("image")) {
+            String extension;
+            if (photo.getOriginalFilename() != null) {
+                extension = photo.getOriginalFilename().split("\\.")[1].toLowerCase();
             } else {
-                log.warn("Category '{}' does not exists", product.getCategory().getName());
-                throw new UnknownResourceException("Unknown category " + product.getCategory().getName());
+                extension = "jpg";
+            }
+            String photoPath = pathPhotoStorage + restaurantId + "." + extension;
+            String bkpUrl = "";
+            log.info("Setting photo name '{}'", restaurantInDb.getPhoto());
+            try {
+                if (restaurantInDb.getPhoto() != null) {
+                    bkpUrl = restaurantInDb.getPhoto() + ".bkp";
+                    Files.move(Paths.get(restaurantInDb.getPhoto()), Paths.get(bkpUrl));
+                }
+                Files.write(Paths.get(photoPath), photo.getBytes());
+                log.info("Photo wrote on disk to '{}'", photoPath);
+                if(!bkpUrl.isEmpty()) {
+                    Files.delete(Paths.get(bkpUrl));
+                }
+                restaurantInDb.setPhoto(photoPath);
+                return this.restaurantRepository.save(restaurantInDb);
+            } catch (IOException e) {
+                if (!bkpUrl.isEmpty()) {
+                    recoverFile(bkpUrl);
+                }
+                throw new FileHandlingException("Could not write file on disk");
             }
         } else {
-            log.warn("Restaurant id '{}' does not exists", restaurantId);
-            throw new UnknownResourceException("Unknown restaurant " + restaurantId);
-        }
-        return product;
-    }
-
-    @Override
-    public Product updateProduct(Long restaurantId, Long productId, Product product) {
-        log.info("Retrieving product id '{}' for restaurant '{}'", productId, restaurantId);
-        if (this.productRepository.findProductByIdAndRestaurantId(productId, restaurantId).isPresent()) {
-            log.info("Product found");
-            product.setId(productId);
-            return this.saveProduct(restaurantId, product);
-        } else {
-            log.info("Product not found");
-            throw new UnknownResourceException("Product '" + productId + "' doesn't exists for restaurant '" + restaurantId + "'");
+            throw new FileHandlingException("Photo is not of the appropriate format");
         }
     }
 
-    @Override
-    public void deleteProduct(Long restaurantId, Long productId) {
-        log.info("Retrieving product id '{}' for restaurant '{}'", productId, restaurantId);
-        Product product = this.productRepository
-                .findProductByIdAndRestaurantId(productId, restaurantId)
-                .orElseThrow(() -> new UnknownResourceException("Product '" + productId + "' doesn't exists for restaurant '" + restaurantId + "'"));
-        log.info("Deleting product");
-        this.productRepository.delete(product);
+    private void recoverFile(String bkpUrl) {
+        try {
+            Files.move(Paths.get(bkpUrl), Paths.get(bkpUrl.replace(".bkp", "")));
+        } catch (IOException e) {
+            throw new FileHandlingException("File could'nt be recovered");
+        }
     }
-
 }

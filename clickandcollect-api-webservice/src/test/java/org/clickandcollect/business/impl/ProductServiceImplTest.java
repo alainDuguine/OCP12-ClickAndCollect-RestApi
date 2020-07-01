@@ -5,9 +5,9 @@ import org.clickandcollect.business.exception.UnknownResourceException;
 import org.clickandcollect.consumer.repository.CategoryRepository;
 import org.clickandcollect.consumer.repository.ProductRepository;
 import org.clickandcollect.consumer.repository.RestaurantRepository;
-import org.clickandcollect.model.entitie.Category;
-import org.clickandcollect.model.entitie.Product;
-import org.clickandcollect.model.entitie.Restaurant;
+import org.clickandcollect.model.entity.Category;
+import org.clickandcollect.model.entity.Product;
+import org.clickandcollect.model.entity.Restaurant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,9 +24,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class RestaurantServiceImplTest {
+public class ProductServiceImplTest {
 
     @Mock
     private RestaurantRepository restaurantRepository;
@@ -36,7 +38,7 @@ public class RestaurantServiceImplTest {
     private CategoryRepository categoryRepository;
 
     @InjectMocks
-    private RestaurantServiceImpl restaurantService;
+    private ProductServiceImpl restaurantService;
 
     Restaurant restaurant;
     Product product;
@@ -114,6 +116,7 @@ public class RestaurantServiceImplTest {
         product = this.restaurantService.updateProduct(1L, 1L, this.product);
 
         assertThat(product.getId()).isEqualTo(1L);
+        verify(this.productRepository, times(1)).save(any());
     }
 
     /*===================================

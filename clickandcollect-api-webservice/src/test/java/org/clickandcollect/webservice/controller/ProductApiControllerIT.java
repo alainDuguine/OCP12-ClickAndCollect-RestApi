@@ -1,10 +1,9 @@
 package org.clickandcollect.webservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.clickandcollect.business.contract.RestaurantService;
-import org.clickandcollect.consumer.repository.ProductRepository;
-import org.clickandcollect.model.entitie.Category;
-import org.clickandcollect.model.entitie.Product;
+import org.clickandcollect.business.contract.ProductService;
+import org.clickandcollect.model.entity.Category;
+import org.clickandcollect.model.entity.Product;
 import org.clickandcollect.webservice.dto.ProductDto;
 import org.clickandcollect.webservice.mapper.ProductMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,16 +25,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-class RestaurantsApiControllerTest {
+class ProductApiControllerIT {
 
     @Mock
-    private RestaurantService restaurantService;
-    @Mock
-    private ProductRepository productRepository;
+    private ProductService productService;
     @Mock
     private ProductMapper productMapper;
     @InjectMocks
-    private RestaurantsApiController controller;
+    private ProductApiController controller;
 
     MockMvc mockMvc;
 
@@ -52,7 +49,7 @@ class RestaurantsApiControllerTest {
         ProductDto productDto = ProductDto.builder().id(1L).name("Test produit n°1").price(10.5D).category("Entrée").build();
         Product product = Product.builder().id(1L).name("Test produit n°1").price(10.5D).category(new Category("Entrée")).build();
 
-        given(restaurantService.saveProduct(any(),any())).willReturn(product);
+        given(productService.saveProduct(any(),any())).willReturn(product);
         given(productMapper.productToProductDto(any())).willReturn(productDto);
 
         mockMvc.perform(post("/restaurants/1/products")
@@ -60,7 +57,7 @@ class RestaurantsApiControllerTest {
                 .content(asJsonString(productDto)))
             .andExpect(status().isCreated());
 
-        then(restaurantService).should().saveProduct(any(),any());
+        then(productService).should().saveProduct(any(),any());
     }
 
     @Test
@@ -76,7 +73,7 @@ class RestaurantsApiControllerTest {
                 .andExpect(jsonPath("errors.name").exists())
                 .andExpect(jsonPath("errors.category").exists());
 
-        then(restaurantService).shouldHaveNoInteractions();
+        then(productService).shouldHaveNoInteractions();
         then(productMapper).shouldHaveNoInteractions();
     }
 
@@ -86,7 +83,7 @@ class RestaurantsApiControllerTest {
         ProductDto productDto = ProductDto.builder().id(1L).name("Test produit n°1").price(10.5D).category("Entrée").build();
         Product product = Product.builder().id(1L).name("Test produit n°1").price(10.5D).category(new Category("Entrée")).build();
 
-        given(restaurantService.updateProduct(1L, productDto.getId(), product)).willReturn(product);
+        given(productService.updateProduct(1L, productDto.getId(), product)).willReturn(product);
         given(productMapper.productDtoToProduct(any())).willReturn(product);
 
         mockMvc.perform(put("/restaurants/1/products/1")
@@ -94,7 +91,7 @@ class RestaurantsApiControllerTest {
                 .content(asJsonString(productDto)))
                 .andExpect(status().isOk());
 
-        then(restaurantService).should().updateProduct(1L, product.getId(), product);
+        then(productService).should().updateProduct(1L, product.getId(), product);
     }
 
     @Test
@@ -110,7 +107,7 @@ class RestaurantsApiControllerTest {
                 .andExpect(jsonPath("errors.name").exists())
                 .andExpect(jsonPath("errors.category").exists());
 
-        then(restaurantService).shouldHaveNoInteractions();
+        then(productService).shouldHaveNoInteractions();
         then(productMapper).shouldHaveNoInteractions();
     }
 

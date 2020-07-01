@@ -1,13 +1,11 @@
 package org.clickandcollect.business.contract;
 
-import org.clickandcollect.model.entitie.Product;
-
-import java.util.List;
+import org.clickandcollect.model.entity.Restaurant;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface RestaurantService {
-    Product saveProduct(Long id, Product product);
-    Product updateProduct(Long restaurantId, Long productId, Product product);
-    void deleteProduct(Long restaurantId, Long productId);
-    List<Product> findProductsByRestaurantId(Long restaurantId);
-    Product findProductByIds(Long restaurantId, Long productId);
+    Restaurant findRestaurantById(Long restaurantId);
+    Restaurant updateRestaurant(Long restaurantId, Restaurant restaurant);
+    Restaurant uploadPhotoRestaurant(Long restaurantId, MultipartFile photo);
+    Restaurant findRestaurantByEmail(String email);
 }

@@ -6,37 +6,36 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Singular;
 
-import javax.validation.constraints.Email;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class RestaurantDto {
+public class MenuDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     @NotNull
-    @Size(min = 3, max = 100)
-    private String name;
-    @NotNull
-    @Email
-    private String email;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Size(min = 6)
-    private String password;
     @Size(max = 100)
-    private String typeCuisine;
+    private String name;
     @Size(max = 255)
     private String description;
-    private String formattedAddress;
-    private String latitude;
-    private String longitude;
-    private List<BusinessHourDto> businessHours = new ArrayList<>();
-    private String photo;
+    @Min(0)
+    @NotNull
+    private Double price;
+    @Size(min = 1, max = 10)
+    @Singular
+    @Valid
+    List<MenuCourseDto> menuCourses = new ArrayList<>();
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Long restaurantId;
+
 }

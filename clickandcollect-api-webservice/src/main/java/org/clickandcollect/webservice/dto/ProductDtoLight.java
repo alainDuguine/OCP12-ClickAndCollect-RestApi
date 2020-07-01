@@ -8,12 +8,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class CategoryDto {
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+public class ProductDtoLight {
     private Long id;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String name;
-
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String description;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String imageUrl;
 }

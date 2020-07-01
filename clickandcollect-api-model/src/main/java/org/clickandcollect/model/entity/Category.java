@@ -1,4 +1,4 @@
-package org.clickandcollect.model.entitie;
+package org.clickandcollect.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,9 +23,28 @@ public class Category {
     private Long id;
     private String name;
     @OneToMany(mappedBy = "category")
+    @Builder.Default
     private List<Product> products = new ArrayList<>();
 
     public Category(String name) {
         this.name = name;
+    }
+
+    public void addProduct(Product product) {
+        this.products.add(product);
+        product.setCategory(this);
+    }
+
+    public void removeProduct(Product product) {
+        this.products.remove(product);
+        product.setCategory(null);
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

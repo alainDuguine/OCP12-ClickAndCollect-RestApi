@@ -2,12 +2,17 @@ package org.clickandcollect.webservice.configuration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.clickandcollect.consumer.repository.CategoryRepository;
+import org.clickandcollect.consumer.repository.MenuRepository;
 import org.clickandcollect.consumer.repository.ProductRepository;
 import org.clickandcollect.consumer.repository.RestaurantRepository;
-import org.clickandcollect.model.entitie.Category;
-import org.clickandcollect.model.entitie.Product;
-import org.clickandcollect.model.entitie.Restaurant;
+import org.clickandcollect.model.entity.Category;
+import org.clickandcollect.model.entity.Menu;
+import org.clickandcollect.model.entity.MenuCourse;
+import org.clickandcollect.model.entity.Product;
+import org.clickandcollect.model.entity.ProductInCourse;
+import org.clickandcollect.model.entity.Restaurant;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,15 +25,19 @@ public class DbInit implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final RestaurantRepository restaurantRepository;
     private final ProductRepository productRepository;
+    private final MenuRepository menuRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public DbInit(CategoryRepository categoryRepository, RestaurantRepository restaurantRepository, ProductRepository productRepository) {
+    public DbInit(CategoryRepository categoryRepository, RestaurantRepository restaurantRepository, ProductRepository productRepository, MenuRepository menuRepository, BCryptPasswordEncoder passwordEncoder) {
         this.categoryRepository = categoryRepository;
         this.restaurantRepository = restaurantRepository;
         this.productRepository = productRepository;
+        this.menuRepository = menuRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         if (categoryRepository.count() == 0) {
             List<Category> categories = new ArrayList<>();
             categories.add(Category.builder().name("Entrée").build());
@@ -39,7 +48,20 @@ public class DbInit implements CommandLineRunner {
             this.categoryRepository.saveAll(categories);
             this.categoryRepository.findAll().forEach(el -> log.info(el.getName()));
 
-            Restaurant restaurant = this.restaurantRepository.save(Restaurant.builder().build());
+            Restaurant restaurant = Restaurant.builder()
+                    .name("Chez Monique & Myrtille")
+                    .email("em@il.com")
+                    .password(passwordEncoder.encode("password"))
+                    .description("La meilleure cantine du quartier Gambetta !")
+                    .typeCuisine("Cuisine du jour fraîche et du marché")
+                    .formattedAddress("83 Rue Orfila, 75020, Paris")
+                    .latitude("48.868028")
+                    .longitude("2.399884")
+                    .roles("ROLE_USER")
+                    .photo("C:\\Users\\alain\\Pictures\\ClickAndCollectPhoto\\1.jpg")
+                    .build();
+
+            restaurant = this.restaurantRepository.save(restaurant);
             Category entree = this.categoryRepository.findCategoryByName("Entrée").get();
             Category plat = this.categoryRepository.findCategoryByName("Plat").get();
             Category dessert = this.categoryRepository.findCategoryByName("Dessert").get();
@@ -56,6 +78,73 @@ public class DbInit implements CommandLineRunner {
             products.add(Product.builder().name("Riz au lait").category(plat).description("Un riz au lait crémeux avec une délicate touche de vanille de Madagasscar").category(dessert).imageUrl("https://assets.afcdn.com/recipe/20171124/75539_w1024h768c1cx2760cy1886cxt0cyt0cxb5520cyb3773.jpg").restaurant(restaurant).price(5.5).build());
 
             this.productRepository.saveAll(products);
+
+            List<Product> entrees = this.productRepository.findAllByRestaurantIdAndCategoryName(restaurant.getId(), entree.getName());
+            List<Product> plats = this.productRepository.findAllByRestaurantIdAndCategoryName(restaurant.getId(), plat.getName());
+            List<Product> desserts = this.productRepository.findAllByRestaurantIdAndCategoryName(restaurant.getId(), dessert.getName());
+
+            Menu menu1 = Menu.builder()
+                    .name("Menu Complet")
+                    .description("Un menu avec une entrée, un plat et un dessert au choix")
+                    .restaurant(restaurant)
+                    .price(16D)
+                    .build();
+
+            MenuCourse entreeMenu = MenuCourse
+                    .builder()
+                    .category(entree)
+                    .build();
+
+            ProductInCourse entree1 = ProductInCourse
+                    .builder()
+                    .product(entrees.get(0))
+                    .build();
+
+            entreeMenu.addProductInCourse(entree1);
+
+            entreeMenu.addProductInCourse(ProductInCourse
+                    .builder()
+                    .product(entrees.get(1))
+                    .extraCost(1D)
+                    .build());
+
+            MenuCourse platMenu = MenuCourse
+                    .builder()
+                    .category(plat)
+                    .build();
+
+            platMenu.addProductInCourse(ProductInCourse
+                    .builder()
+                    .product(plats.get(0))
+                    .build());
+
+            platMenu.addProductInCourse(ProductInCourse
+                    .builder()
+                    .product(plats.get(1))
+                    .extraCost(1D)
+                    .build());
+
+            MenuCourse dessertMenu = MenuCourse
+                    .builder()
+                    .category(dessert)
+                    .build();
+
+            dessertMenu.addProductInCourse(ProductInCourse
+                    .builder()
+                    .product(desserts.get(0))
+                    .build());
+
+            dessertMenu.addProductInCourse(ProductInCourse
+                    .builder()
+                    .product(desserts.get(1))
+                    .extraCost(1.5D)
+                    .build());
+
+            menu1.addCourse(entreeMenu);
+            menu1.addCourse(platMenu);
+            menu1.addCourse(dessertMenu);
+
+            this.menuRepository.save(menu1);
         }
     }
 }

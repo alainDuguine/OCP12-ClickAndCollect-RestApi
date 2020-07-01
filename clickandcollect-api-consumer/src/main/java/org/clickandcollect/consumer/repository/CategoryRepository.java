@@ -1,6 +1,6 @@
 package org.clickandcollect.consumer.repository;
 
-import org.clickandcollect.model.entitie.Category;
+import org.clickandcollect.model.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

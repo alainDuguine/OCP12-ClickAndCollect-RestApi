@@ -12,21 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(CategoriesApiController.RESOURCE_URL)
+@RequestMapping("/categories")
 @Slf4j
-public class CategoriesApiController {
-
-    public static final String RESOURCE_URL = "/categories";
+public class CategorieApiController {
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
-    public CategoriesApiController(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
+    public CategorieApiController(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
     }
 
-    @GetMapping("")
+    @GetMapping()
     public ResponseEntity<List<CategoryDto>> getCategories(){
         log.info("Request for categories, returning '{}' results", this.categoryRepository.count());
         return ResponseEntity.ok(categoryMapper.categoryListToDtoList(categoryRepository.findAll()));

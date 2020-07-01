@@ -1,11 +1,9 @@
-package org.clickandcollect.consumer.repositorie;
+package org.clickandcollect.consumer.repository;
 
-import org.clickandcollect.consumer.repository.ProductRepository;
-import org.clickandcollect.model.entitie.Category;
-import org.clickandcollect.model.entitie.Product;
-import org.clickandcollect.model.entitie.Restaurant;
+import org.clickandcollect.model.entity.Category;
+import org.clickandcollect.model.entity.Product;
+import org.clickandcollect.model.entity.Restaurant;
 import org.clickandcollect.webservice.ClickAndCollectApiApplication;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +24,8 @@ class ProductRepositoryIT {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
     private Product product;
 
@@ -40,20 +40,7 @@ class ProductRepositoryIT {
                         Category.builder().id(1L).build()
                 )
                 .build();
-    }
 
-    @AfterEach
-    void tearDown() {
-        this.productRepository.delete(this.product);
-    }
-
-    @Test
-    void givenValidProduct_whenAddNewProduct_shouldPersistToDatabase(){
-        long nbProducts = this.productRepository.count();
-
-        this.productRepository.save(product);
-
-        assertThat(this.productRepository.count()).isEqualTo(nbProducts + 1);
     }
 
     @Test
@@ -70,14 +57,45 @@ class ProductRepositoryIT {
     void givenDuplicateProductName_whenAddNewProduct_shouldNotBePersistedToDatabase(){
         long nbProducts = this.productRepository.count();
 
-        this.productRepository.save(product);
+        this.product = this.productRepository.save(product);
 
         assertThat(this.productRepository.count()).isEqualTo(nbProducts + 1);
 
+        Long id = this.product.getId();
         this.product.setId(null);
 
         assertThrows(DataIntegrityViolationException.class, () -> this.productRepository.save(product));
         assertThat(this.productRepository.count()).isEqualTo(nbProducts + 1);
+
+        this.productRepository.deleteById(id);
+    }
+
+    @Test
+    void givenDuplicateProductNameWithDifferentRestaurantId_whenAddNewProduct_shouldBePersistedToDatabase(){
+        Restaurant restaurant = this.restaurantRepository.save(Restaurant.builder()
+                .id(2L)
+                .name("test Name")
+                .password("password")
+                .email("email@example.com").build());
+
+        this.product = this.productRepository.save(product);
+
+        long nbProducts = this.productRepository.count();
+
+        Product product2 = Product.builder()
+                .name("Test product")
+                .price(12.56)
+                .restaurant(restaurant)
+                .category(
+                        Category.builder().id(1L).build()
+                )
+                .build();
+        this.productRepository.save(product2);
+
+        assertThat(this.productRepository.count()).isEqualTo(nbProducts + 1);
+        this.productRepository.deleteById(this.product.getId());
+        this.productRepository.deleteById(product2.getId());
+        this.restaurantRepository.deleteById(restaurant.getId());
     }
 
     @Test
@@ -100,6 +118,22 @@ class ProductRepositoryIT {
     void givenExistingProductId_whenGetProduct_shouldReturnProduct() {
         Optional<Product> product = this.productRepository.findProductByIdAndRestaurantId(9999L,1L);
         assertThat(product.isEmpty()).isTrue();
+    }
+
+    @Test
+    void givenUnknownCategory_whenGetProducts_shouldReturnEmptyList() {
+        assertThat(this.productRepository.findAllByRestaurantIdAndCategoryName(1L, "test").size()).isEqualTo(0);
+    }
+
+    @Test
+    void givenExistingCategory_whenGetProducts_shouldReturnNotEmptyList() {
+        assertThat(this.productRepository.findAllByRestaurantIdAndCategoryName(1L, "Plat").size()).isGreaterThan(0);
+    }
+
+    @Test
+    void givenNoCategory_whenGetProducts_shouldReturnFullList() {
+        long nbItems = productRepository.count();
+        assertThat(this.productRepository.findAllByRestaurantIdAndCategoryName(1L, null).size()).isEqualTo(nbItems);
     }
 
 }
