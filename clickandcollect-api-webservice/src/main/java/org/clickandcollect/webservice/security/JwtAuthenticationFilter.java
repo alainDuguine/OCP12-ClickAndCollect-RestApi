@@ -54,7 +54,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } catch (Exception e) {
                 request.setAttribute(ERROR, "WRONG_JWT");
                 log.error("an error occured during extraction username from token", e);
-
             }
         } else {
             log.debug("no token found");

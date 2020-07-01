@@ -43,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(resourceAccessFilterBean(), UsernamePasswordAuthenticationFilter.class);
         http.headers().frameOptions().disable();
     }
 
@@ -60,6 +61,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JwtAuthenticationFilter authenticationTokenFilterBean() {
         return new JwtAuthenticationFilter(userDetailsService, jwtUtil);
+    }
+
+    @Bean
+    public ResourceAccessFilter resourceAccessFilterBean() {
+        return new ResourceAccessFilter();
     }
 
     @Bean

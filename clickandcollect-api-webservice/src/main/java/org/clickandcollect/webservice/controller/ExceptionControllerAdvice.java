@@ -3,6 +3,7 @@ package org.clickandcollect.webservice.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.clickandcollect.business.exception.FileHandlingException;
 import org.clickandcollect.business.exception.ResourceDuplicationException;
+import org.clickandcollect.business.exception.UnauthorizedResourceException;
 import org.clickandcollect.business.exception.UnknownResourceException;
 import org.clickandcollect.webservice.dto.ApiError;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
@@ -43,6 +45,19 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler({BadCredentialsException.class})
     public ResponseEntity<Object> badCredentials(Exception ex) {
         return buildError(ex, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler({UnauthorizedResourceException.class})
+    public ResponseEntity<Object> unauthorizedResourceException(Exception ex, WebRequest request) {
+        log.warn(LOGMSG, ex.getClass(), ex.getMessage());
+        Map<String, String> mapErrors = new HashMap<>();
+        mapErrors.put(request.getParameter("error"),ex.getMessage());
+        ApiError apiError = ApiError.builder()
+                .status(HttpStatus.FORBIDDEN)
+                .message(ex.getLocalizedMessage())
+                .errors(mapErrors)
+                .build();
+        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
     @ExceptionHandler({FileHandlingException.class, MissingServletRequestPartException.class, MaxUploadSizeExceededException.class})
