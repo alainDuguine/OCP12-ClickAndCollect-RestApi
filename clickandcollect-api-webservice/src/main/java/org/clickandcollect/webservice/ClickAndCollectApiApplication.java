@@ -28,7 +28,7 @@ public class ClickAndCollectApiApplication {
                         .allowedOrigins("http://localhost:4200")
                         .allowedMethods("GET","HEAD","PUT","POST","DELETE")
                         .allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method",
-                                "Access-Control-Request-Headers")
+                                "Access-Control-Request-Headers", "Authorization")
                         .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials");
             }
         };
