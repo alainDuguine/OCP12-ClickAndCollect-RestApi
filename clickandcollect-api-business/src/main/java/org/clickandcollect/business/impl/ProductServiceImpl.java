@@ -5,6 +5,7 @@ import org.clickandcollect.business.contract.ProductService;
 import org.clickandcollect.business.exception.ResourceDuplicationException;
 import org.clickandcollect.business.exception.UnknownResourceException;
 import org.clickandcollect.consumer.repository.CategoryRepository;
+import org.clickandcollect.consumer.repository.ProductInCourseRepository;
 import org.clickandcollect.consumer.repository.ProductRepository;
 import org.clickandcollect.consumer.repository.RestaurantRepository;
 import org.clickandcollect.model.entity.Category;
@@ -13,6 +14,7 @@ import org.clickandcollect.model.entity.Restaurant;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,14 +24,15 @@ public class ProductServiceImpl implements ProductService {
 
     private final RestaurantRepository restaurantRepository;
     private final ProductRepository productRepository;
+    private final ProductInCourseRepository productInCourseRepository;
     private final CategoryRepository categoryRepository;
 
-    public ProductServiceImpl(RestaurantRepository restaurantRepository, ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductServiceImpl(RestaurantRepository restaurantRepository, ProductRepository productRepository, ProductInCourseRepository productInCourseRepository, CategoryRepository categoryRepository) {
         this.restaurantRepository = restaurantRepository;
         this.productRepository = productRepository;
+        this.productInCourseRepository = productInCourseRepository;
         this.categoryRepository = categoryRepository;
     }
-
 
     @Override
     public List<Product> findProductsByRestaurantId(Long restaurantId, String category) {
@@ -86,12 +89,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void deleteProduct(Long restaurantId, Long productId) {
         log.info("Retrieving product id '{}' for restaurant '{}'", productId, restaurantId);
         Product product = this.productRepository
                 .findProductByIdAndRestaurantId(productId, restaurantId)
                 .orElseThrow(() -> new UnknownResourceException(this.getUnknownResourceErrorMessage(productId, restaurantId)));
         log.info("Deleting product");
+        this.productInCourseRepository.deleteAllByProductId(productId);
         this.productRepository.delete(product);
     }
 

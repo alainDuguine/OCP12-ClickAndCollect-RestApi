@@ -92,7 +92,7 @@ public class RestaurantServiceImpl implements RestaurantService {
                 return this.restaurantRepository.save(restaurantInDb);
             } catch (IOException e) {
                 if (!bkpUrl.isEmpty()) {
-                    recoverFile(bkpUrl);
+                    recoverFile(bkpUrl, e.getMessage());
                 }
                 throw new FileHandlingException("Could not write file on disk");
             }
@@ -101,11 +101,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
     }
 
-    private void recoverFile(String bkpUrl) {
+    private void recoverFile(String bkpUrl, String error) {
         try {
             Files.move(Paths.get(bkpUrl), Paths.get(bkpUrl.replace(".bkp", "")));
         } catch (IOException e) {
-            throw new FileHandlingException("File could'nt be recovered");
+            throw new FileHandlingException(error);
         }
     }
 }

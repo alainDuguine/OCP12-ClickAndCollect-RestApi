@@ -29,5 +29,4 @@ public class CategorieApiController {
         log.info("Request for categories, returning '{}' results", this.categoryRepository.count());
         return ResponseEntity.ok(categoryMapper.categoryListToDtoList(categoryRepository.findAll()));
     }
-
 }
