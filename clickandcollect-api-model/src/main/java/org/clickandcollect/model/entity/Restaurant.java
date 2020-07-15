@@ -1,5 +1,7 @@
 package org.clickandcollect.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vividsolutions.jts.geom.Point;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +18,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -46,7 +49,11 @@ public class Restaurant implements UserDetails {
     private String formattedAddress;
     private String latitude;
     private String longitude;
+    @JsonIgnore
+    private Point location;
     private String photo;
+    @Transient
+    private Double distance;
 
     @OneToMany(
             mappedBy = "restaurant",
@@ -139,6 +146,14 @@ public class Restaurant implements UserDetails {
     public String toString() {
         return "Restaurant{" +
                 "id=" + id +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", typeCuisine='" + typeCuisine + '\'' +
+                ", description='" + description + '\'' +
+                ", formattedAddress='" + formattedAddress + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", photo='" + photo + '\'' +
                 '}';
     }
 }

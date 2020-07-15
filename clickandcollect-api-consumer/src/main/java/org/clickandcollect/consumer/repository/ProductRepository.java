@@ -14,7 +14,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAllByRestaurantId(Long id);
     @Query("SELECT p " +
             "FROM Product p " +
-            "JOIN p.category c " +
             "WHERE p.restaurant.id = :id " +
             "AND (:category is null or p.category.name = :category)")
     List<Product> findAllByRestaurantIdAndCategoryName(@Param("id") Long restaurantId, @Param("category") String categoryName);
