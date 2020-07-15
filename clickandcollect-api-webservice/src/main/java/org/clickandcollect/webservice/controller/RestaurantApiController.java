@@ -34,7 +34,7 @@ public class RestaurantApiController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<RestaurantDto>> getRestaurantWithin(@RequestParam("lat") Double latitude,
+    public ResponseEntity<List<RestaurantDto>> getRestaurantWithinRadius(@RequestParam("lat") Double latitude,
                                                                 @RequestParam("long") Double longitude,
                                                                 @RequestParam("rad") Integer radius) {
         List<Restaurant> restaurants = this.restaurantService.findRestaurantsWithin(latitude, longitude, radius);

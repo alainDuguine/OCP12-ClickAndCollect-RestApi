@@ -1,7 +1,5 @@
 package org.clickandcollect.webservice.configuration;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.clickandcollect.consumer.repository.CategoryRepository;
 import org.clickandcollect.consumer.repository.MenuRepository;
@@ -13,6 +11,8 @@ import org.clickandcollect.model.entity.MenuCourse;
 import org.clickandcollect.model.entity.Product;
 import org.clickandcollect.model.entity.ProductInCourse;
 import org.clickandcollect.model.entity.Restaurant;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;

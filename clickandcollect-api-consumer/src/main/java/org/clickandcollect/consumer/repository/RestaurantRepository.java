@@ -1,7 +1,7 @@
 package org.clickandcollect.consumer.repository;
 
-import com.vividsolutions.jts.geom.Geometry;
 import org.clickandcollect.model.entity.Restaurant;
+import org.locationtech.jts.geom.Geometry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

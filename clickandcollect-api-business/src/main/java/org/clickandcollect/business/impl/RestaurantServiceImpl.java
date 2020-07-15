@@ -1,14 +1,15 @@
 package org.clickandcollect.business.impl;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.util.GeometricShapeFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.clickandcollect.business.contract.RestaurantService;
 import org.clickandcollect.business.exception.FileHandlingException;
 import org.clickandcollect.business.exception.UnknownResourceException;
 import org.clickandcollect.consumer.repository.RestaurantRepository;
 import org.clickandcollect.model.entity.Restaurant;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.util.GeometricShapeFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -51,8 +52,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         log.info("Searching restaurants {} km to point {} lat., {} long.", radius, latitude, longitude);
 
 //        Geometry circle = this.createCircle(latitude, longitude, radius);
-//        List<Restaurant> restaurants = this.restaurantRepository.findRestaurantWithin(circle);
-//        return restaurants;
+//        return this.restaurantRepository.findRestaurantWithin(circle);
 
         return this.restaurantRepository.findAll().stream()
                 .filter(restaurant -> {
@@ -67,18 +67,6 @@ public class RestaurantServiceImpl implements RestaurantService {
 //                .skip(size * page - 1)
 //                .limit(size)
                 .collect(Collectors.toList());
-
-//        List<Restaurant> restaurantsWithin = new ArrayList<>();
-//        for (Restaurant restaurant : restaurants) {
-//            Double distance = this.getDistance(Double.parseDouble(restaurant.getLatitude()), Double.parseDouble(restaurant.getLongitude()), latitude, longitude);
-//            if (distance <= radius){
-//                restaurant.setDistance(distance);
-//                restaurantsWithin.add(restaurant);
-//            }
-//        }
-////        sort restaurant by distance
-//        restaurantsWithin.sort(Comparator.comparing(Restaurant::getDistance));
-//        return restaurantsWithin;
     }
 
     private Double getDistance(Double latitude1, Double longitude1, Double latitude2, Double longitude2) {
@@ -97,12 +85,12 @@ public class RestaurantServiceImpl implements RestaurantService {
         return Math.sqrt(distance);
     }
 
-//    private Geometry createCircle(Double latitude, Double longitude, Integer radius) {
-//        geometricShapeFactory.setNumPoints(32);
-//        geometricShapeFactory.setCentre(new Coordinate(latitude, longitude));
-//        geometricShapeFactory.setSize(radius * 2);
-//        return geometricShapeFactory.createCircle();
-//    }
+    private Geometry createCircle(Double latitude, Double longitude, Integer radius) {
+        geometricShapeFactory.setNumPoints(32);
+        geometricShapeFactory.setCentre(new Coordinate(latitude, longitude));
+        geometricShapeFactory.setSize(radius);
+        return geometricShapeFactory.createCircle();
+    }
 
     @Override
     public Restaurant findRestaurantById(Long restaurantId) {

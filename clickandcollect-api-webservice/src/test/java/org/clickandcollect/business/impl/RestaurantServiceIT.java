@@ -109,4 +109,19 @@ public class RestaurantServiceIT {
         assertThat(restaurant1.getBusinessHours()).isEqualTo(businessHours);
     }
 
+    @Test
+    public void givenPosition_whenSearchForRestaurantWithinCircle_thenReturnGoodDistanceRestaurants() {
+        List<Restaurant> restaurants = this.restaurantService.findRestaurantsWithin(48.868924,2.402176,5);
+        assertThat(restaurants.size()).isEqualTo(8);
+        restaurants.forEach(restaurant -> {
+            assertThat(restaurant.getDistance()).isLessThan(5);
+        });
+    }
+
+    @Test
+    public void givenOOBPosition_whenSearchForRestaurantWithinCircle_thenReturnNoRestaurants() {
+        List<Restaurant> restaurants = this.restaurantService.findRestaurantsWithin(43.553386,-0.658295,5);
+        assertThat(restaurants.size()).isEqualTo(0);
+    }
+
 }
