@@ -12,8 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -26,8 +26,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "client_order")
-public class Order {
+public class ClientOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +43,7 @@ public class Order {
     private LocalDateTime pickupDateTime;
 
     @OneToMany(
-            mappedBy = "order",
+            mappedBy = "clientOrder",
             orphanRemoval = true,
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
@@ -52,21 +51,24 @@ public class Order {
     List<MenuOrder> menuOrders = new ArrayList<>();
 
     @OneToMany(
-            mappedBy = "order",
+            mappedBy = "clientOrder",
             orphanRemoval = true,
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
     List<ProductOrder> productOrders = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Restaurant restaurant;
+
     public void addMenuOrder(MenuOrder menuOrder) {
         this.menuOrders.add(menuOrder);
-        menuOrder.setOrder(this);
+        menuOrder.setClientOrder(this);
     }
 
     public void addProductOrder(ProductOrder productOrder) {
         this.productOrders.add(productOrder);
-        productOrder.setOrder(this);
+        productOrder.setClientOrder(this);
     }
 
     @Override

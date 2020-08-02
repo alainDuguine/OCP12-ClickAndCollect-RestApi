@@ -3,7 +3,7 @@ package org.clickandcollect.webservice.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.clickandcollect.business.contract.OrderService;
 import org.clickandcollect.business.contract.RestaurantService;
-import org.clickandcollect.model.entity.Order;
+import org.clickandcollect.model.entity.ClientOrder;
 import org.clickandcollect.model.entity.Restaurant;
 import org.clickandcollect.webservice.dto.OrderDto;
 import org.clickandcollect.webservice.dto.RestaurantFullDto;
@@ -61,10 +61,8 @@ public class OrderApiController {
     public ResponseEntity<Void> addOrder(@PathVariable Long restaurantId,
                                          @Valid @RequestBody OrderDto orderDto) {
         log.info("Sending new order for restaurant id '{}'", restaurantId);
-        Order order = orderMapper.orderDtoToOrder(orderDto);
-//        Order order = this.orderService.saveOrder(restaurantId, orderMapper.orderDtoToOrder(orderDto));
-        log.info("Order '{}' created", order.getId());
+        ClientOrder clientOrder = this.orderService.saveOrder(restaurantId, orderMapper.orderDtoToOrder(orderDto));
+        log.info("Order '{}' created", clientOrder.getId());
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 }

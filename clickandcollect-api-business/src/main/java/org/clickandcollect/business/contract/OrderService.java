@@ -1,7 +1,7 @@
 package org.clickandcollect.business.contract;
 
-import org.clickandcollect.model.entity.Order;
+import org.clickandcollect.model.entity.ClientOrder;
 
 public interface OrderService {
-    Order saveOrder(Long restaurantId, Order order);
+    ClientOrder saveOrder(Long restaurantId, ClientOrder clientOrder);
 }

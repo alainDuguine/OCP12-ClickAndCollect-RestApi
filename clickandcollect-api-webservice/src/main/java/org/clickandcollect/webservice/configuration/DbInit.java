@@ -40,76 +40,76 @@ public class DbInit implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (categoryRepository.count() == 0) {
-            List<Category> categories = new ArrayList<>();
-            categories.add(Category.builder().name("Entrée").build());
-            categories.add(Category.builder().name("Plat").build());
-            categories.add(Category.builder().name("Dessert").build());
-            categories.add(Category.builder().name("Boisson").build());
-            categories.add(Category.builder().name("Formule").build());
-            this.categoryRepository.saveAll(categories);
-            this.categoryRepository.findAll().forEach(el -> log.info(el.getName()));
-
-            this.saveNewRestaurant("Chez Monique & Myrtille",
-                    "em@il.com",
-                    "83 Rue Orfila, 75020, Paris",
-                    "48.868028",
-                    "2.399884");
-
-            this.saveNewRestaurant("Les Petits Oignons",
-                    "2em@il.com",
-                    "81 rue Orfila, 75020, Paris",
-                    "48.867999",
-                    "2.399762");
-
-            this.saveNewRestaurant("Chantefable",
-                    "3em@il.com",
-                    "93 Avenue Gambetta, 75020, Paris",
-                    "48.866465",
-                    "2.399659");
-
-            this.saveNewRestaurant("Shingané",
-                    "4em@il.com",
-                    "63 Avenue Gambetta, 75020, Paris",
-                    "48.865089",
-                    "2.396215");
-
-            this.saveNewRestaurant("Kodawari Ramen",
-                    "5em@il.com",
-                    "15 Rue Chevreul, 75011, Paris",
-                    "48.850293",
-                    "2.391831");
-
-            this.saveNewRestaurant("Ground Control",
-                    "6em@il.com",
-                    "81 Rue du Charolais, 75012, Paris",
-                    "48.843742",
-                    "2.381803");
-
-            this.saveNewRestaurant("Au Pays de Confucius",
-                    "7em@il.com",
-                    "68 Boulevard de l'Hôpital, 75013, Paris",
-                    "48.841782",
-                    "2.359768");
-
-            this.saveNewRestaurant("Restaurant La Mosquée de Paris",
-                    "8em@il.com",
-                    "39 Rue Geoffroy-Saint-Hilaire, 75005, Paris",
-                    "48.841782",
-                    "2.355641");
-
-            this.saveNewRestaurant("My Noodles",
-                    "9em@il.com",
-                    "129 Boulevard du Montparnasse, 75006, Paris",
-                    "48.843053",
-                    "2.326374");
-
-            this.saveNewRestaurant("Le Verre Siffleur",
-                    "10em@il.com",
-                    "73 Rue d'Alésia, 75014 Paris",
-                    "48.827709",
-                    "2.32875");
-        }
+//        if (categoryRepository.count() == 0) {
+//            List<Category> categories = new ArrayList<>();
+//            categories.add(Category.builder().name("Entrée").build());
+//            categories.add(Category.builder().name("Plat").build());
+//            categories.add(Category.builder().name("Dessert").build());
+//            categories.add(Category.builder().name("Boisson").build());
+//            categories.add(Category.builder().name("Formule").build());
+//            this.categoryRepository.saveAll(categories);
+//            this.categoryRepository.findAll().forEach(el -> log.info(el.getName()));
+//
+//            this.saveNewRestaurant("Chez Monique & Myrtille",
+//                    "em@il.com",
+//                    "83 Rue Orfila, 75020, Paris",
+//                    "48.868028",
+//                    "2.399884");
+//
+//            this.saveNewRestaurant("Les Petits Oignons",
+//                    "2em@il.com",
+//                    "81 rue Orfila, 75020, Paris",
+//                    "48.867999",
+//                    "2.399762");
+//
+//            this.saveNewRestaurant("Chantefable",
+//                    "3em@il.com",
+//                    "93 Avenue Gambetta, 75020, Paris",
+//                    "48.866465",
+//                    "2.399659");
+//
+//            this.saveNewRestaurant("Shingané",
+//                    "4em@il.com",
+//                    "63 Avenue Gambetta, 75020, Paris",
+//                    "48.865089",
+//                    "2.396215");
+//
+//            this.saveNewRestaurant("Kodawari Ramen",
+//                    "5em@il.com",
+//                    "15 Rue Chevreul, 75011, Paris",
+//                    "48.850293",
+//                    "2.391831");
+//
+//            this.saveNewRestaurant("Ground Control",
+//                    "6em@il.com",
+//                    "81 Rue du Charolais, 75012, Paris",
+//                    "48.843742",
+//                    "2.381803");
+//
+//            this.saveNewRestaurant("Au Pays de Confucius",
+//                    "7em@il.com",
+//                    "68 Boulevard de l'Hôpital, 75013, Paris",
+//                    "48.841782",
+//                    "2.359768");
+//
+//            this.saveNewRestaurant("Restaurant La Mosquée de Paris",
+//                    "8em@il.com",
+//                    "39 Rue Geoffroy-Saint-Hilaire, 75005, Paris",
+//                    "48.841782",
+//                    "2.355641");
+//
+//            this.saveNewRestaurant("My Noodles",
+//                    "9em@il.com",
+//                    "129 Boulevard du Montparnasse, 75006, Paris",
+//                    "48.843053",
+//                    "2.326374");
+//
+//            this.saveNewRestaurant("Le Verre Siffleur",
+//                    "10em@il.com",
+//                    "73 Rue d'Alésia, 75014 Paris",
+//                    "48.827709",
+//                    "2.32875");
+//        }
     }
 
     private void saveNewRestaurant(String name, String email, String address, String latitude, String longitude){

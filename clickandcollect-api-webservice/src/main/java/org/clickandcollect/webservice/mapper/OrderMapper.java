@@ -1,7 +1,7 @@
 package org.clickandcollect.webservice.mapper;
 
+import org.clickandcollect.model.entity.ClientOrder;
 import org.clickandcollect.model.entity.MenuOrder;
-import org.clickandcollect.model.entity.Order;
 import org.clickandcollect.model.entity.ProductOrder;
 import org.clickandcollect.model.entity.SelectedProduct;
 import org.clickandcollect.webservice.dto.MenuOrderDto;
@@ -15,14 +15,16 @@ import org.mapstruct.Mapping;
 public interface OrderMapper {
 
     @Mapping(target = "id", ignore = true)
-    Order orderDtoToOrder(OrderDto orderDto);
+    ClientOrder orderDtoToOrder(OrderDto orderDto);
 
-    @Mapping(target = "order", ignore = true)
+
+    @Mapping(target = "clientOrder", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "product.id", source = "productId")
     ProductOrder dtoToProductOrder(ProductOrderDto productOrderDto);
 
-    @Mapping(target = "order", ignore = true)
+
+    @Mapping(target = "clientOrder", ignore = true)
     @Mapping(target = "menu.id", source = "menuId")
     @Mapping(target = "id", ignore = true)
     MenuOrder dtoToMenuOrder(MenuOrderDto menuOrderDto);

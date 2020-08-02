@@ -72,6 +72,14 @@ public class Restaurant implements UserDetails {
             fetch = FetchType.LAZY)
     private List<BusinessHour> businessHours = new ArrayList<>();
 
+    @OneToMany(
+            mappedBy = "restaurant",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private List<ClientOrder> clientOrders = new ArrayList<>();
+
     @Builder.Default
     private String roles = "";
     @Builder.Default
@@ -136,6 +144,11 @@ public class Restaurant implements UserDetails {
     public void addAllBusinessHours(List<BusinessHour> businessHours) {
         this.businessHours.clear();
         businessHours.forEach(this::addBusinessHour);
+    }
+
+    public void addOrder(ClientOrder clientOrder) {
+        this.clientOrders.add(clientOrder);
+        clientOrder.setRestaurant(this);
     }
 
     @Override

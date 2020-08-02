@@ -11,7 +11,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
@@ -29,23 +28,23 @@ public class MenuOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Menu menu;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="client_order_id")
-    private Order order;
+    private ClientOrder clientOrder;
 
-    @NotNull
     @OneToMany(
             mappedBy = "menuOrder",
             orphanRemoval = true,
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
+            cascade = CascadeType.ALL
     )
     List<SelectedProduct> selectedProducts = new ArrayList<>();
+
+    public void addSelectedProduct(SelectedProduct selectedProduct) {
+        this.selectedProducts.add(selectedProduct);
+        selectedProduct.setMenuOrder(this);
+    }
 
     @NotNull
     private Integer quantity;
