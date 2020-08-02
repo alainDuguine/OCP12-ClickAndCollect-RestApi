@@ -1,0 +1,13 @@
+version: '3.1'
+services:
+  library.db:
+    image: postgres
+    restart: always
+    ports:
+      - "127.0.0.1:9032:5432"
+    volumes:
+      - "./sql:/docker-entrypoint-initdb.d"
+    environment:
+      - POSTGRES_DB=db_clickandcollect
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=8mpdcaAP

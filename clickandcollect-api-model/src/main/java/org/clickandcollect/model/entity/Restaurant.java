@@ -1,11 +1,9 @@
 package org.clickandcollect.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.locationtech.jts.geom.Point;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,8 +47,6 @@ public class Restaurant implements UserDetails {
     private String formattedAddress;
     private String latitude;
     private String longitude;
-    @JsonIgnore
-    private Point location;
     private String photo;
     @Transient
     private Double distance;
@@ -153,7 +149,6 @@ public class Restaurant implements UserDetails {
                 ", formattedAddress='" + formattedAddress + '\'' +
                 ", latitude='" + latitude + '\'' +
                 ", longitude='" + longitude + '\'' +
-                ", photo='" + photo + '\'' +
                 '}';
     }
 }

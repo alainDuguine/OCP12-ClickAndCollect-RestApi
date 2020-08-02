@@ -1,6 +1,5 @@
 package org.clickandcollect.webservice.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -17,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ProductInCourseDto {
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     @NotNull
     private Long productId;

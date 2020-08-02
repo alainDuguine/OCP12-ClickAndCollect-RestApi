@@ -6,10 +6,6 @@ import org.clickandcollect.business.exception.FileHandlingException;
 import org.clickandcollect.business.exception.UnknownResourceException;
 import org.clickandcollect.consumer.repository.RestaurantRepository;
 import org.clickandcollect.model.entity.Restaurant;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.util.GeometricShapeFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -26,17 +22,14 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RestaurantServiceImpl implements RestaurantService {
 
+    public static final String UNKNOWN_RESTAURANT = "Unknown restaurant '";
     private final RestaurantRepository restaurantRepository;
-    private final GeometryFactory geometryFactory;
-    private final GeometricShapeFactory geometricShapeFactory;
 
     @Value("${path-photo-storage}")
     private String pathPhotoStorage;
 
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, GeometryFactory geometryFactory, GeometricShapeFactory geometricShapeFactory) {
+    public RestaurantServiceImpl(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
-        this.geometryFactory = geometryFactory;
-        this.geometricShapeFactory = geometricShapeFactory;
     }
 
 
@@ -44,25 +37,17 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Restaurant findRestaurantByEmail(String email) {
         log.info("Retrieving restaurant by email '{}'", email);
         return this.restaurantRepository.findRestaurantByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Unknown restaurant '" + email + "'"));
+                .orElseThrow(() -> new UsernameNotFoundException(UNKNOWN_RESTAURANT + email + "'"));
     }
 
     @Override
     public List<Restaurant> findRestaurantsWithin(Double latitude, Double longitude, Integer radius) {
         log.info("Searching restaurants {} km to point {} lat., {} long.", radius, latitude, longitude);
 
-//        Geometry circle = this.createCircle(latitude, longitude, radius);
-//        return this.restaurantRepository.findRestaurantWithin(circle);
-
         return this.restaurantRepository.findAll().stream()
-                .filter(restaurant -> {
-                    Double distance = this.getDistance(Double.parseDouble(restaurant.getLatitude()), Double.parseDouble(restaurant.getLongitude()), latitude, longitude);
-                    if (distance <= radius){
-                        restaurant.setDistance(distance);
-                        return true;
-                    }
-                    return false;
-                })
+                .filter(restaurant -> restaurant.getLatitude() != null)
+                .peek(restaurant -> restaurant.setDistance(this.getDistance(Double.parseDouble(restaurant.getLatitude()), Double.parseDouble(restaurant.getLongitude()), latitude, longitude)))
+                .filter(restaurant -> restaurant.getDistance() <= radius)
                 .sorted(Comparator.comparing(Restaurant::getDistance))
 //                .skip(size * page - 1)
 //                .limit(size)
@@ -85,18 +70,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         return Math.sqrt(distance);
     }
 
-    private Geometry createCircle(Double latitude, Double longitude, Integer radius) {
-        geometricShapeFactory.setNumPoints(32);
-        geometricShapeFactory.setCentre(new Coordinate(latitude, longitude));
-        geometricShapeFactory.setSize(radius);
-        return geometricShapeFactory.createCircle();
-    }
-
     @Override
     public Restaurant findRestaurantById(Long restaurantId) {
         log.info("Retrieving restaurant id '{}'", restaurantId);
         return this.restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new UnknownResourceException("Unknown restaurant '" + restaurantId + "'")
+                .orElseThrow(() -> new UnknownResourceException(UNKNOWN_RESTAURANT + restaurantId + "'")
         );
     }
 
@@ -104,7 +82,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Restaurant updateRestaurant(Long restaurantId, Restaurant restaurant) {
         log.info("Retrieving restaurant id '{}' for update", restaurantId);
         Restaurant restaurantInDb = this.restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new UnknownResourceException("Unknown restaurant '" + restaurantId + "'"));
+                .orElseThrow(() -> new UnknownResourceException(UNKNOWN_RESTAURANT + restaurantId + "'"));
         log.info("Restaurant found");
         restaurantInDb.setName(restaurant.getName());
         restaurantInDb.setDescription(restaurant.getDescription());
@@ -112,17 +90,6 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurantInDb.setFormattedAddress(restaurant.getFormattedAddress());
         restaurantInDb.setLatitude(restaurant.getLatitude());
         restaurantInDb.setLongitude(restaurant.getLongitude());
-
-        if (restaurantInDb.getLatitude() != null && restaurantInDb.getLongitude() != null) {
-            restaurantInDb.setLocation(
-                    geometryFactory.createPoint(
-                            new Coordinate(
-                                    Double.parseDouble(restaurant.getLatitude()),
-                                    Double.parseDouble(restaurant.getLongitude())
-                            )
-                    )
-            );
-        }
 
         if (restaurant.getBusinessHours() != null) {
             restaurantInDb.addAllBusinessHours(restaurant.getBusinessHours());
@@ -134,7 +101,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Restaurant uploadPhotoRestaurant(Long restaurantId, MultipartFile photo) {
         log.info("Retrieving restaurant id '{}' for photo upload", restaurantId);
         Restaurant restaurantInDb = this.restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new UnknownResourceException("Unknown restaurant '" + restaurantId + "'"));
+                .orElseThrow(() -> new UnknownResourceException(UNKNOWN_RESTAURANT + restaurantId + "'"));
         log.info("Restaurant found");
         if (photo != null && photo.getContentType() != null && photo.getContentType().toLowerCase().startsWith("image")) {
             String extension;

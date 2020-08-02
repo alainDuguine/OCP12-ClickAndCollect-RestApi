@@ -1,9 +1,5 @@
 package org.clickandcollect.webservice;
 
-//import com.vividsolutions.jts.geom.GeometryFactory;
-//import com.vividsolutions.jts.util.GeometricShapeFactory;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.util.GeometricShapeFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -36,16 +32,6 @@ public class ClickAndCollectApiApplication {
                         .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials");
             }
         };
-    }
-
-    @Bean
-    public GeometryFactory geometryFactoryBean() {
-        return new GeometryFactory();
-    }
-
-    @Bean
-    public GeometricShapeFactory geometricShapeFactoryBean() {
-        return new GeometricShapeFactory();
     }
 
 }

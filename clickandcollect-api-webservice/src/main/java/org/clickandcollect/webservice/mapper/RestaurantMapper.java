@@ -17,7 +17,6 @@ public interface RestaurantMapper {
     RestaurantDto restaurantToRestaurantDto(Restaurant restaurant);
     List<RestaurantDto> restaurantsToDto(List<Restaurant> restaurants);
 
-    @Mapping(target = "location", ignore = true)
     @Mapping(target = "distance", ignore = true)
     @Mapping(target = "roles", ignore = true)
     @Mapping(target = "photo", ignore = true)
@@ -35,7 +34,6 @@ public interface RestaurantMapper {
     @Mapping(target = "id", ignore = true)
     Restaurant registerFormToRestaurant(RegistrationFormDto registerForm);
 
-    @Mapping(target = "location", ignore = true)
     @Mapping(target = "roles", ignore = true)
     @Mapping(target = "locked", ignore = true)
     @Mapping(target = "expired", ignore = true)

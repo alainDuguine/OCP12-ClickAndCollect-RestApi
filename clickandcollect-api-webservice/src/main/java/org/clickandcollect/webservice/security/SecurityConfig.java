@@ -1,6 +1,8 @@
 package org.clickandcollect.webservice.security;
 
 import org.clickandcollect.webservice.controller.AuthenticationApiController;
+import org.clickandcollect.webservice.controller.OrderApiController;
+import org.clickandcollect.webservice.controller.RestaurantApiController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers(AuthenticationApiController.BASE_URL+"/**").permitAll()
+                .antMatchers(RestaurantApiController.BASE_URL).permitAll()
+                .antMatchers(OrderApiController.BASE_URL + "/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(this.unauthorizedHandler)

@@ -25,6 +25,8 @@ import java.util.List;
 @Slf4j
 public class RestaurantApiController {
 
+    public static String BASE_URL = "/restaurants";
+
     private final RestaurantService restaurantService;
     private final RestaurantMapper restaurantMapper;
 

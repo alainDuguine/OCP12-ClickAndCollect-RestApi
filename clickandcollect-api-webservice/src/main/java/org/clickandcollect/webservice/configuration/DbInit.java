@@ -11,8 +11,6 @@ import org.clickandcollect.model.entity.MenuCourse;
 import org.clickandcollect.model.entity.Product;
 import org.clickandcollect.model.entity.ProductInCourse;
 import org.clickandcollect.model.entity.Restaurant;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -29,17 +27,15 @@ public class DbInit implements CommandLineRunner {
     private final ProductRepository productRepository;
     private final MenuRepository menuRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final GeometryFactory geometryFactory;
 
     public DbInit(CategoryRepository categoryRepository, RestaurantRepository restaurantRepository,
                   ProductRepository productRepository, MenuRepository menuRepository,
-                  BCryptPasswordEncoder passwordEncoder, GeometryFactory geometryFactory) {
+                  BCryptPasswordEncoder passwordEncoder) {
         this.categoryRepository = categoryRepository;
         this.restaurantRepository = restaurantRepository;
         this.productRepository = productRepository;
         this.menuRepository = menuRepository;
         this.passwordEncoder = passwordEncoder;
-        this.geometryFactory = geometryFactory;
     }
 
     @Override
@@ -127,7 +123,6 @@ public class DbInit implements CommandLineRunner {
                 .formattedAddress(address)
                 .latitude(latitude)
                 .longitude(longitude)
-                .location(geometryFactory.createPoint(new Coordinate(Double.parseDouble(latitude), Double.parseDouble(longitude))))
                 .roles("ROLE_USER")
                 .photo("C:\\Users\\alain\\Pictures\\ClickAndCollectPhoto\\" + id + ".jpg")
                 .build();
