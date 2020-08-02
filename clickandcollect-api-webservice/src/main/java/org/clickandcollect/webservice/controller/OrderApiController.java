@@ -61,7 +61,8 @@ public class OrderApiController {
     public ResponseEntity<Void> addOrder(@PathVariable Long restaurantId,
                                          @Valid @RequestBody OrderDto orderDto) {
         log.info("Sending new order for restaurant id '{}'", restaurantId);
-        Order order = this.orderService.saveOrder(restaurantId, orderMapper.orderDtoToOrder(orderDto));
+        Order order = orderMapper.orderDtoToOrder(orderDto);
+//        Order order = this.orderService.saveOrder(restaurantId, orderMapper.orderDtoToOrder(orderDto));
         log.info("Order '{}' created", order.getId());
         return new ResponseEntity<>(HttpStatus.OK);
 

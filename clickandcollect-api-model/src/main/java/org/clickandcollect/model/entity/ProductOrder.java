@@ -40,7 +40,7 @@ public class ProductOrder {
     public String toString() {
         return "ProductOrder{" +
                 "id=" + id +
-                ", product=" + product.getName() +
+                ", product=" + product +
                 ", quantity=" + quantity +
                 '}';
     }

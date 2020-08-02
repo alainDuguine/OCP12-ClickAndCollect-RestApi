@@ -8,17 +8,16 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class MenuOrderDto {
+public class ProductOrderDto {
     @NotNull
-    private Long menuId;
-    private List<SelectedProductDto> selectedProducts;
+    private Long productId;
+    @NotNull
     @Min(1)
     private Integer quantity;
 }

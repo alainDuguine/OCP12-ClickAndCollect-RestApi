@@ -54,7 +54,7 @@ public class MenuOrder {
     public String toString() {
         return "MenuOrder{" +
                 "id=" + id +
-                ", menu=" + menu.getName() +
+                ", menu=" + menu +
                 ", quantity=" + quantity +
                 '}';
     }
