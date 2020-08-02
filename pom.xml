@@ -87,7 +87,7 @@
                 <artifactId>mapstruct</artifactId>
                 <version>${org.mapstruct.version}</version>
             </dependency>
-            
+
         </dependencies>
     </dependencyManagement>
     

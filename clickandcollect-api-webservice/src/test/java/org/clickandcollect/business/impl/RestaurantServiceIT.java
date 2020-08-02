@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -107,6 +108,20 @@ public class RestaurantServiceIT {
         Restaurant restaurant1 = this.restaurantService.findRestaurantById(restaurant.getId());
 
         assertThat(restaurant1.getBusinessHours()).isEqualTo(businessHours);
+    }
+
+    @Test
+    public void givenPosition_whenSearchForRestaurantWithinCircle_thenReturnGoodDistanceRestaurants() {
+        List<Restaurant> restaurants = this.restaurantService.findRestaurantsWithin(48.868924,2.402176,5);
+        assertThat(restaurants.size()).isEqualTo(8);
+        assertThat(restaurants).isSortedAccordingTo(Comparator.comparingDouble(Restaurant::getDistance));
+        restaurants.forEach(restaurant -> assertThat(restaurant.getDistance()).isLessThan(5));
+    }
+
+    @Test
+    public void givenOOBPosition_whenSearchForRestaurantWithinCircle_thenReturnNoRestaurants() {
+        List<Restaurant> restaurants = this.restaurantService.findRestaurantsWithin(43.553386,-0.658295,5);
+        assertThat(restaurants.size()).isEqualTo(0);
     }
 
 }

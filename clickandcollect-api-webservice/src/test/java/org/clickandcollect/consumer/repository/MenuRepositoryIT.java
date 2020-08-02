@@ -94,7 +94,7 @@ public class MenuRepositoryIT {
     @Test
     void givenDuplicateMenuNameWithDifferentRestaurantId_whenAddNewMenu_shouldBePersistedToDatabase(){
         Restaurant restaurant = this.restaurantRepository.save(Restaurant.builder()
-                .id(2L)
+                .id(99L)
                 .name("test Name")
                 .password("password")
                 .email("email@example.com").build());

@@ -6,27 +6,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Singular;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class MenuCourseDto {
+public class RestaurantFullDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Long id;
-    @NotNull
-    private String category;
-
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Singular("productInCourse")
-    @Valid
-    private List<ProductInCourseDto> productsInCourse;
+    private RestaurantDto restaurant;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private List<ProductDto> products;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private List<MenuDto> menus;
 }

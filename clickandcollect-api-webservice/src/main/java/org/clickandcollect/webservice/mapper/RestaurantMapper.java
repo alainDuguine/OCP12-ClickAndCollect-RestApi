@@ -9,12 +9,15 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.time.DayOfWeek;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface RestaurantMapper {
 
     RestaurantDto restaurantToRestaurantDto(Restaurant restaurant);
+    List<RestaurantDto> restaurantsToDto(List<Restaurant> restaurants);
 
+    @Mapping(target = "distance", ignore = true)
     @Mapping(target = "roles", ignore = true)
     @Mapping(target = "photo", ignore = true)
     @Mapping(target = "locked", ignore = true)

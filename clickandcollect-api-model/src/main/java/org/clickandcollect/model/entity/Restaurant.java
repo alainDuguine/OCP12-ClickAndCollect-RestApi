@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -47,6 +48,8 @@ public class Restaurant implements UserDetails {
     private String latitude;
     private String longitude;
     private String photo;
+    @Transient
+    private Double distance;
 
     @OneToMany(
             mappedBy = "restaurant",
@@ -68,6 +71,14 @@ public class Restaurant implements UserDetails {
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<BusinessHour> businessHours = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "restaurant",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private List<ClientOrder> clientOrders = new ArrayList<>();
 
     @Builder.Default
     private String roles = "";
@@ -135,10 +146,22 @@ public class Restaurant implements UserDetails {
         businessHours.forEach(this::addBusinessHour);
     }
 
+    public void addOrder(ClientOrder clientOrder) {
+        this.clientOrders.add(clientOrder);
+        clientOrder.setRestaurant(this);
+    }
+
     @Override
     public String toString() {
         return "Restaurant{" +
                 "id=" + id +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", typeCuisine='" + typeCuisine + '\'' +
+                ", description='" + description + '\'' +
+                ", formattedAddress='" + formattedAddress + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
                 '}';
     }
 }

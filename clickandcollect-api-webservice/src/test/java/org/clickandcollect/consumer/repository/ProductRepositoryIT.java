@@ -73,7 +73,7 @@ class ProductRepositoryIT {
     @Test
     void givenDuplicateProductNameWithDifferentRestaurantId_whenAddNewProduct_shouldBePersistedToDatabase(){
         Restaurant restaurant = this.restaurantRepository.save(Restaurant.builder()
-                .id(2L)
+                .id(99L)
                 .name("test Name")
                 .password("password")
                 .email("email@example.com").build());
@@ -133,7 +133,7 @@ class ProductRepositoryIT {
     @Test
     void givenNoCategory_whenGetProducts_shouldReturnFullList() {
         long nbItems = productRepository.count();
-        assertThat(this.productRepository.findAllByRestaurantIdAndCategoryName(1L, null).size()).isEqualTo(nbItems);
+        assertThat(this.productRepository.findAllByRestaurantIdAndCategoryName(1L, null).size()).isEqualTo(nbItems / 10);
     }
 
 }

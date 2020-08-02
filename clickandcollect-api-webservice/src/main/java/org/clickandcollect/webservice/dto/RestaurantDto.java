@@ -39,4 +39,5 @@ public class RestaurantDto {
     private String longitude;
     private List<BusinessHourDto> businessHours = new ArrayList<>();
     private String photo;
+    private Double distance;
 }

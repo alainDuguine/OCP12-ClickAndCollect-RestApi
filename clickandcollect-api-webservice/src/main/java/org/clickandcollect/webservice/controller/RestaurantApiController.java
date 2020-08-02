@@ -18,11 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/restaurants")
 @Slf4j
 public class RestaurantApiController {
+
+    public static String BASE_URL = "/restaurants";
 
     private final RestaurantService restaurantService;
     private final RestaurantMapper restaurantMapper;
@@ -32,8 +35,16 @@ public class RestaurantApiController {
         this.restaurantMapper = restaurantMapper;
     }
 
+    @GetMapping()
+    public ResponseEntity<List<RestaurantDto>> getRestaurantWithinRadius(@RequestParam("lat") Double latitude,
+                                                                @RequestParam("long") Double longitude,
+                                                                @RequestParam("rad") Integer radius) {
+        List<Restaurant> restaurants = this.restaurantService.findRestaurantsWithin(latitude, longitude, radius);
+        return new ResponseEntity<>(this.restaurantMapper.restaurantsToDto(restaurants), HttpStatus.OK);
+    }
+
     @GetMapping("{restaurantId}")
-    public ResponseEntity<RestaurantDto> getRestaurant(@PathVariable Long restaurantId) {
+    public ResponseEntity<RestaurantDto> getRestaurantById(@PathVariable Long restaurantId) {
         log.info("Retrieving the restaurant '{}'", restaurantId);
         Restaurant restaurant = this.restaurantService.findRestaurantById(restaurantId);
         log.info("Restaurant '{}' found", restaurant.getId());
@@ -53,7 +64,7 @@ public class RestaurantApiController {
     }
 
     @PostMapping("{restaurantId}/upload")
-    public ResponseEntity<RestaurantDto> uploadPhoto(@RequestParam("photo")MultipartFile photo, @PathVariable Long restaurantId) {
+    public ResponseEntity<RestaurantDto> uploadPhoto(@RequestParam("photo") MultipartFile photo, @PathVariable Long restaurantId) {
         log.info("Uploading photo for restaurant id '{}'", restaurantId);
         Restaurant restaurant = this.restaurantService.uploadPhotoRestaurant(restaurantId, photo);
         log.info("Photo uploaded for restaurant id '{}'", restaurantId);

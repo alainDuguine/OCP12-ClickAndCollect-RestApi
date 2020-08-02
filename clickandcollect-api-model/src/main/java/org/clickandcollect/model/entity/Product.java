@@ -38,6 +38,15 @@ public class Product {
     @NotNull
     private Double price;
     private String imageUrl;
+
+    @OneToMany(
+            mappedBy = "product",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private List<ProductOrder> productOrders = new ArrayList<>();
+
     @OneToMany(
             mappedBy = "product",
             cascade = CascadeType.ALL,
@@ -53,6 +62,11 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     private Restaurant restaurant;
+
+    private void addOrder(ProductOrder order) {
+        this.productOrders.add(order);
+        order.setProduct(this);
+    }
 
     @Override
     public String toString() {
