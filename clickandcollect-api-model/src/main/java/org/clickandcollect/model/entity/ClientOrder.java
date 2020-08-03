@@ -58,7 +58,7 @@ public class ClientOrder {
     )
     List<ProductOrder> productOrders = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Restaurant restaurant;
 
     public void addMenuOrder(MenuOrder menuOrder) {

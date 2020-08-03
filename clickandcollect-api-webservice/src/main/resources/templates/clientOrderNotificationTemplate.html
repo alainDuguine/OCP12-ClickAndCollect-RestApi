@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Click'n Collect</title>
+    <link href="https://fonts.googleapis.com/css?family=Literata&display=swap" rel="stylesheet">
+    <style>
+
+        body {
+            font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue", "Literata",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+            font-size: 20px;
+            color: black;
+            text-align: center;
+        }
+
+        .logo{
+            width: 100px;
+            margin-top: 1rem;
+        }
+
+    </style>
+
+</head>
+<body>
+<div>
+    <div style="background-color: #F8F9FA">
+        <div>
+            <p>
+                <img class="logo" alt="Logo" th:src="@{https://i.ibb.co/Z1mJkWQ/kitchen.png}" src="https://i.ibb.co/Z1mJkWQ/kitchen.png"/>
+            </p>
+            <h1 style="font-weight : 400" >Click'n Collect</h1>
+            <hr style="border-bottom: 1px solid black">
+        </div>
+    </div>
+    <div style="background-color: white">
+        <h1 style="font-weight : 400">Bonjour <span th:text="${order.firstName}">Alain</span> !</h1>
+        <p>Votre commande a bien été envoyée !</p>
+        <hr style="border-bottom: 1px solid black;">
+        <div>
+            <p>
+                <b>Restaurant : </b><span th:text="${order.getRestaurant().name}">Chez Monique & Myrtille</span>
+                <br>
+                <b>Adresse : </b><span th:text="${order.getRestaurant().getFormattedAddress()}">83 rue Orfila, 75020 Paris</span>
+                <br>
+                <b>Heure de retrait : </b><span th:text="${#temporals.format(order.getPickupDateTime())}">21/12/20 à 13h45</span>
+            </p>
+        </div>
+        <p><b>Récapitulatif de la commande :</b>
+            <br>
+        <ul>
+            <li th:each="product : ${order.getProductOrders()}" style="list-style:none;">
+                <span th:text="${product.quantity}">2</span> x
+                <span th:text="${product.product.name} ">Filet de saumon</span> =
+                <span th:text="${#numbers.formatCurrency(product.product.price * product.quantity)}">25 €</span>
+            </li>
+            <li th:each="menu : ${order.getMenuOrders()}" style="list-style:none;">
+                <span th:text="${menu.quantity}">1</span> x
+                <span th:text="${menu.menu.name} ">Menu Complet</span> =
+                <span th:text="${#numbers.formatCurrency(menu.menu.price * menu.quantity)}">28 €</span>
+                :
+                <ul>
+                    <li th:each="productInMenu : ${menu.getSelectedProducts()}" style="list-style:none;">
+                        <span><b>- </b></span>
+                        <span style="font-weight: bold" th:text="${productInMenu.productInCourse.product.category.name}">Entrée : </span>
+                        <span th:text="${productInMenu.productInCourse.product.name}">Salade grecque</span>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <hr>
+        <p>Total commande : <span th:text="${#numbers.formatCurrency(totalPrice)}">53 €</span></p>
+    </div>
+</div>
+</body>
