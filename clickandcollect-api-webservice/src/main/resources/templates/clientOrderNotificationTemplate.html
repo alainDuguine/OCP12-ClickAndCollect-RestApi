@@ -63,6 +63,7 @@
                     <li th:each="productInMenu : ${menu.getSelectedProducts()}" style="list-style:none;">
                         <span><b>- </b></span>
                         <span style="font-weight: bold" th:text="${productInMenu.productInCourse.product.category.name}">Entrée : </span>
+                        :
                         <span th:text="${productInMenu.productInCourse.product.name}">Salade grecque</span>
                     </li>
                 </ul>

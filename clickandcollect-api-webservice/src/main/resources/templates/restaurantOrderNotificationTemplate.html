@@ -43,33 +43,38 @@
                 <br>
                 <b>Numéro de téléphone : </b><span th:text="${order.phoneNumber}">83 rue Orfila, 75020 Paris</span>
                 <br>
+                <b>Adresse email : </b><span th:text="${order.email}">em@il.com</span>
+                <br>
                 <b>Heure de retrait : </b><span th:text="${#temporals.format(order.pickupDateTime)}">21/12/20 à 13h45</span>
             </p>
         </div>
-        <p><b>Récapitulatif de la commande :</b>
+        <div style="margin-left: auto; margin-right: auto">
+            <b>Récapitulatif de la commande :</b>
             <br>
-        <ul>
-            <li th:each="product : ${order.getProductOrders()}" style="list-style:none;">
-                <span th:text="${product.quantity}">2</span> x
-                <span th:text="${product.product.name} ">Filet de saumon</span> =
-                <span th:text="${#numbers.formatCurrency(product.product.price * product.quantity)}">25 €</span>
-            </li>
-            <li th:each="menu : ${order.getMenuOrders()}" style="list-style:none;">
-                <span th:text="${menu.quantity}">1</span> x
-                <span th:text="${menu.menu.name} ">Menu Complet</span> =
-                <span th:text="${#numbers.formatCurrency(menu.menu.price * menu.quantity)}">28 €</span>
-                :
-                <ul>
-                    <li th:each="productInMenu : ${menu.getSelectedProducts()}" style="list-style:none;">
-                        <span><b>- </b></span>
-                        <span style="font-weight: bold" th:text="${productInMenu.productInCourse.product.category.name}">Entrée : </span>
-                        <span th:text="${productInMenu.productInCourse.product.name}">Salade grecque</span>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-        <hr>
-        <p>Total commande : <span th:text="${#numbers.formatCurrency(totalPrice)}">53 €</span></p>
+            <ul>
+                <li th:each="product : ${order.getProductOrders()}" style="list-style:none;">
+                    <span th:text="${product.quantity}">2</span> x
+                    <span th:text="${product.product.name} ">Filet de saumon</span> =
+                    <span th:text="${#numbers.formatCurrency(product.product.price * product.quantity)}">25 €</span>
+                </li>
+                <li th:each="menu : ${order.getMenuOrders()}" style="list-style:none;">
+                    <span th:text="${menu.quantity}">1</span> x
+                    <span th:text="${menu.menu.name} ">Menu Complet</span> =
+                    <span th:text="${#numbers.formatCurrency(menu.menu.price * menu.quantity)}">28 €</span>
+                    :
+                    <ul>
+                        <li th:each="productInMenu : ${menu.getSelectedProducts()}" style="list-style:none;">
+                            <span><b>- </b></span>
+                            <span style="font-weight: bold" th:text="${productInMenu.productInCourse.product.category.name}">Entrée : </span>
+                            :
+                            <span th:text="${productInMenu.productInCourse.product.name}">Salade grecque</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <hr>
+            <p>Total commande : <span th:text="${#numbers.formatCurrency(totalPrice)}">53 €</span></p>
+        </div>
     </div>
 </div>
 </body>

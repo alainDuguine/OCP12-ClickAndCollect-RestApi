@@ -66,7 +66,9 @@ public class OrderApiController {
         log.info("Sending new order for restaurant id '{}'", restaurantId);
         ClientOrder clientOrder = this.orderService.saveOrder(restaurantId, orderMapper.orderDtoToOrder(orderDto));
         log.info("Order '{}' created", clientOrder.getId());
+        log.info("Sending email clientOrderNotification order '{}'", clientOrder.getId());
         this.emailService.sendClientOrderNotification(clientOrder);
+        log.info("Sending email restaurantOrderNotification order '{}'", clientOrder.getId());
         this.emailService.sendRestaurantOrderNotification(clientOrder);
         return new ResponseEntity<>(HttpStatus.OK);
     }
