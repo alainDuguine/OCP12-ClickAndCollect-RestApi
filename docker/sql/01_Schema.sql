@@ -5,18 +5,7 @@
 -- Dumped from database version 11.6
 -- Dumped by pg_dump version 11.6
 
--- Started on 2020-07-17 07:23:51
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
+-- Started on 2020-08-03 17:12:18
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -34,7 +23,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- TOC entry 197 (class 1259 OID 240597)
+-- TOC entry 197 (class 1259 OID 248164)
 -- Name: business_hour; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -51,7 +40,7 @@ CREATE TABLE public.business_hour (
 ALTER TABLE public.business_hour OWNER TO postgres;
 
 --
--- TOC entry 196 (class 1259 OID 240595)
+-- TOC entry 196 (class 1259 OID 248162)
 -- Name: business_hour_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -66,7 +55,7 @@ CREATE SEQUENCE public.business_hour_id_seq
 ALTER TABLE public.business_hour_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2888 (class 0 OID 0)
+-- TOC entry 2931 (class 0 OID 0)
 -- Dependencies: 196
 -- Name: business_hour_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -75,7 +64,7 @@ ALTER SEQUENCE public.business_hour_id_seq OWNED BY public.business_hour.id;
 
 
 --
--- TOC entry 199 (class 1259 OID 240605)
+-- TOC entry 199 (class 1259 OID 248172)
 -- Name: category; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -88,7 +77,7 @@ CREATE TABLE public.category (
 ALTER TABLE public.category OWNER TO postgres;
 
 --
--- TOC entry 198 (class 1259 OID 240603)
+-- TOC entry 198 (class 1259 OID 248170)
 -- Name: category_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -103,7 +92,7 @@ CREATE SEQUENCE public.category_id_seq
 ALTER TABLE public.category_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2889 (class 0 OID 0)
+-- TOC entry 2932 (class 0 OID 0)
 -- Dependencies: 198
 -- Name: category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -112,7 +101,49 @@ ALTER SEQUENCE public.category_id_seq OWNED BY public.category.id;
 
 
 --
--- TOC entry 201 (class 1259 OID 240613)
+-- TOC entry 201 (class 1259 OID 248180)
+-- Name: client_order; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.client_order (
+    id bigint NOT NULL,
+    email character varying(255),
+    first_name character varying(255) NOT NULL,
+    last_name character varying(255) NOT NULL,
+    phone_number character varying(10),
+    pickup_date_time timestamp without time zone NOT NULL,
+    restaurant_id bigint
+);
+
+
+ALTER TABLE public.client_order OWNER TO postgres;
+
+--
+-- TOC entry 200 (class 1259 OID 248178)
+-- Name: client_order_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.client_order_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.client_order_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2933 (class 0 OID 0)
+-- Dependencies: 200
+-- Name: client_order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.client_order_id_seq OWNED BY public.client_order.id;
+
+
+--
+-- TOC entry 203 (class 1259 OID 248191)
 -- Name: menu; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -129,7 +160,7 @@ CREATE TABLE public.menu (
 ALTER TABLE public.menu OWNER TO postgres;
 
 --
--- TOC entry 203 (class 1259 OID 240622)
+-- TOC entry 205 (class 1259 OID 248200)
 -- Name: menu_course; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -143,7 +174,7 @@ CREATE TABLE public.menu_course (
 ALTER TABLE public.menu_course OWNER TO postgres;
 
 --
--- TOC entry 202 (class 1259 OID 240620)
+-- TOC entry 204 (class 1259 OID 248198)
 -- Name: menu_course_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -158,8 +189,8 @@ CREATE SEQUENCE public.menu_course_id_seq
 ALTER TABLE public.menu_course_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2890 (class 0 OID 0)
--- Dependencies: 202
+-- TOC entry 2934 (class 0 OID 0)
+-- Dependencies: 204
 -- Name: menu_course_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -167,7 +198,7 @@ ALTER SEQUENCE public.menu_course_id_seq OWNED BY public.menu_course.id;
 
 
 --
--- TOC entry 200 (class 1259 OID 240611)
+-- TOC entry 202 (class 1259 OID 248189)
 -- Name: menu_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -182,8 +213,8 @@ CREATE SEQUENCE public.menu_id_seq
 ALTER TABLE public.menu_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2891 (class 0 OID 0)
--- Dependencies: 200
+-- TOC entry 2935 (class 0 OID 0)
+-- Dependencies: 202
 -- Name: menu_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -191,7 +222,46 @@ ALTER SEQUENCE public.menu_id_seq OWNED BY public.menu.id;
 
 
 --
--- TOC entry 205 (class 1259 OID 240630)
+-- TOC entry 207 (class 1259 OID 248208)
+-- Name: menu_order; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.menu_order (
+    id bigint NOT NULL,
+    quantity integer NOT NULL,
+    client_order_id bigint,
+    menu_id bigint
+);
+
+
+ALTER TABLE public.menu_order OWNER TO postgres;
+
+--
+-- TOC entry 206 (class 1259 OID 248206)
+-- Name: menu_order_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.menu_order_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.menu_order_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2936 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: menu_order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.menu_order_id_seq OWNED BY public.menu_order.id;
+
+
+--
+-- TOC entry 209 (class 1259 OID 248216)
 -- Name: product; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -210,7 +280,7 @@ CREATE TABLE public.product (
 ALTER TABLE public.product OWNER TO postgres;
 
 --
--- TOC entry 204 (class 1259 OID 240628)
+-- TOC entry 208 (class 1259 OID 248214)
 -- Name: product_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -225,8 +295,8 @@ CREATE SEQUENCE public.product_id_seq
 ALTER TABLE public.product_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2892 (class 0 OID 0)
--- Dependencies: 204
+-- TOC entry 2937 (class 0 OID 0)
+-- Dependencies: 208
 -- Name: product_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -234,7 +304,7 @@ ALTER SEQUENCE public.product_id_seq OWNED BY public.product.id;
 
 
 --
--- TOC entry 207 (class 1259 OID 240642)
+-- TOC entry 211 (class 1259 OID 248228)
 -- Name: product_in_course; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -250,7 +320,7 @@ CREATE TABLE public.product_in_course (
 ALTER TABLE public.product_in_course OWNER TO postgres;
 
 --
--- TOC entry 206 (class 1259 OID 240640)
+-- TOC entry 210 (class 1259 OID 248226)
 -- Name: product_in_course_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -265,8 +335,8 @@ CREATE SEQUENCE public.product_in_course_id_seq
 ALTER TABLE public.product_in_course_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2893 (class 0 OID 0)
--- Dependencies: 206
+-- TOC entry 2938 (class 0 OID 0)
+-- Dependencies: 210
 -- Name: product_in_course_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -274,7 +344,46 @@ ALTER SEQUENCE public.product_in_course_id_seq OWNED BY public.product_in_course
 
 
 --
--- TOC entry 209 (class 1259 OID 240651)
+-- TOC entry 213 (class 1259 OID 248237)
+-- Name: product_order; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.product_order (
+    id bigint NOT NULL,
+    quantity integer NOT NULL,
+    client_order_id bigint,
+    product_id bigint
+);
+
+
+ALTER TABLE public.product_order OWNER TO postgres;
+
+--
+-- TOC entry 212 (class 1259 OID 248235)
+-- Name: product_order_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.product_order_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.product_order_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2939 (class 0 OID 0)
+-- Dependencies: 212
+-- Name: product_order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.product_order_id_seq OWNED BY public.product_order.id;
+
+
+--
+-- TOC entry 215 (class 1259 OID 248245)
 -- Name: restaurant; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -286,7 +395,6 @@ CREATE TABLE public.restaurant (
     expired boolean NOT NULL,
     formatted_address character varying(255),
     latitude character varying(255),
-    location bytea,
     locked boolean NOT NULL,
     longitude character varying(255),
     name character varying(100) NOT NULL,
@@ -300,7 +408,7 @@ CREATE TABLE public.restaurant (
 ALTER TABLE public.restaurant OWNER TO postgres;
 
 --
--- TOC entry 208 (class 1259 OID 240649)
+-- TOC entry 214 (class 1259 OID 248243)
 -- Name: restaurant_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -315,8 +423,8 @@ CREATE SEQUENCE public.restaurant_id_seq
 ALTER TABLE public.restaurant_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2894 (class 0 OID 0)
--- Dependencies: 208
+-- TOC entry 2940 (class 0 OID 0)
+-- Dependencies: 214
 -- Name: restaurant_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -324,7 +432,45 @@ ALTER SEQUENCE public.restaurant_id_seq OWNED BY public.restaurant.id;
 
 
 --
--- TOC entry 2723 (class 2604 OID 240600)
+-- TOC entry 217 (class 1259 OID 248256)
+-- Name: selected_product; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.selected_product (
+    id bigint NOT NULL,
+    menu_order_id bigint,
+    product_in_course_id bigint
+);
+
+
+ALTER TABLE public.selected_product OWNER TO postgres;
+
+--
+-- TOC entry 216 (class 1259 OID 248254)
+-- Name: selected_product_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.selected_product_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.selected_product_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2941 (class 0 OID 0)
+-- Dependencies: 216
+-- Name: selected_product_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.selected_product_id_seq OWNED BY public.selected_product.id;
+
+
+--
+-- TOC entry 2748 (class 2604 OID 248167)
 -- Name: business_hour id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -332,7 +478,7 @@ ALTER TABLE ONLY public.business_hour ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- TOC entry 2724 (class 2604 OID 240608)
+-- TOC entry 2749 (class 2604 OID 248175)
 -- Name: category id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -340,7 +486,15 @@ ALTER TABLE ONLY public.category ALTER COLUMN id SET DEFAULT nextval('public.cat
 
 
 --
--- TOC entry 2725 (class 2604 OID 240616)
+-- TOC entry 2750 (class 2604 OID 248183)
+-- Name: client_order id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.client_order ALTER COLUMN id SET DEFAULT nextval('public.client_order_id_seq'::regclass);
+
+
+--
+-- TOC entry 2751 (class 2604 OID 248194)
 -- Name: menu id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -348,7 +502,7 @@ ALTER TABLE ONLY public.menu ALTER COLUMN id SET DEFAULT nextval('public.menu_id
 
 
 --
--- TOC entry 2727 (class 2604 OID 240625)
+-- TOC entry 2753 (class 2604 OID 248203)
 -- Name: menu_course id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -356,7 +510,15 @@ ALTER TABLE ONLY public.menu_course ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 2728 (class 2604 OID 240633)
+-- TOC entry 2754 (class 2604 OID 248211)
+-- Name: menu_order id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.menu_order ALTER COLUMN id SET DEFAULT nextval('public.menu_order_id_seq'::regclass);
+
+
+--
+-- TOC entry 2755 (class 2604 OID 248219)
 -- Name: product id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -364,7 +526,7 @@ ALTER TABLE ONLY public.product ALTER COLUMN id SET DEFAULT nextval('public.prod
 
 
 --
--- TOC entry 2730 (class 2604 OID 240645)
+-- TOC entry 2757 (class 2604 OID 248231)
 -- Name: product_in_course id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -372,7 +534,15 @@ ALTER TABLE ONLY public.product_in_course ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
--- TOC entry 2732 (class 2604 OID 240654)
+-- TOC entry 2759 (class 2604 OID 248240)
+-- Name: product_order id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_order ALTER COLUMN id SET DEFAULT nextval('public.product_order_id_seq'::regclass);
+
+
+--
+-- TOC entry 2760 (class 2604 OID 248248)
 -- Name: restaurant id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -380,7 +550,15 @@ ALTER TABLE ONLY public.restaurant ALTER COLUMN id SET DEFAULT nextval('public.r
 
 
 --
--- TOC entry 2734 (class 2606 OID 240602)
+-- TOC entry 2761 (class 2604 OID 248259)
+-- Name: selected_product id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.selected_product ALTER COLUMN id SET DEFAULT nextval('public.selected_product_id_seq'::regclass);
+
+
+--
+-- TOC entry 2763 (class 2606 OID 248169)
 -- Name: business_hour business_hour_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -389,7 +567,7 @@ ALTER TABLE ONLY public.business_hour
 
 
 --
--- TOC entry 2736 (class 2606 OID 240610)
+-- TOC entry 2765 (class 2606 OID 248177)
 -- Name: category category_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -398,7 +576,16 @@ ALTER TABLE ONLY public.category
 
 
 --
--- TOC entry 2742 (class 2606 OID 240627)
+-- TOC entry 2767 (class 2606 OID 248188)
+-- Name: client_order client_order_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.client_order
+    ADD CONSTRAINT client_order_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2773 (class 2606 OID 248205)
 -- Name: menu_course menu_course_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -407,7 +594,16 @@ ALTER TABLE ONLY public.menu_course
 
 
 --
--- TOC entry 2738 (class 2606 OID 240619)
+-- TOC entry 2775 (class 2606 OID 248213)
+-- Name: menu_order menu_order_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.menu_order
+    ADD CONSTRAINT menu_order_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2769 (class 2606 OID 248197)
 -- Name: menu menu_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -416,7 +612,7 @@ ALTER TABLE ONLY public.menu
 
 
 --
--- TOC entry 2748 (class 2606 OID 240648)
+-- TOC entry 2781 (class 2606 OID 248234)
 -- Name: product_in_course product_in_course_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -425,7 +621,16 @@ ALTER TABLE ONLY public.product_in_course
 
 
 --
--- TOC entry 2744 (class 2606 OID 240639)
+-- TOC entry 2783 (class 2606 OID 248242)
+-- Name: product_order product_order_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_order
+    ADD CONSTRAINT product_order_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2777 (class 2606 OID 248225)
 -- Name: product product_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -434,7 +639,7 @@ ALTER TABLE ONLY public.product
 
 
 --
--- TOC entry 2750 (class 2606 OID 240659)
+-- TOC entry 2785 (class 2606 OID 248253)
 -- Name: restaurant restaurant_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -443,7 +648,16 @@ ALTER TABLE ONLY public.restaurant
 
 
 --
--- TOC entry 2740 (class 2606 OID 240661)
+-- TOC entry 2789 (class 2606 OID 248261)
+-- Name: selected_product selected_product_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.selected_product
+    ADD CONSTRAINT selected_product_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2771 (class 2606 OID 248263)
 -- Name: menu uk9s8xm0dmlhjsl1vdvinwcm3pt; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -452,7 +666,7 @@ ALTER TABLE ONLY public.menu
 
 
 --
--- TOC entry 2752 (class 2606 OID 240665)
+-- TOC entry 2787 (class 2606 OID 248267)
 -- Name: restaurant uk_979xvypjc2lwr1ia4kq77cko0; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -461,7 +675,7 @@ ALTER TABLE ONLY public.restaurant
 
 
 --
--- TOC entry 2746 (class 2606 OID 240663)
+-- TOC entry 2779 (class 2606 OID 248265)
 -- Name: product ukm46qbd3yi2rk99ddf2blubus8; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -470,7 +684,7 @@ ALTER TABLE ONLY public.product
 
 
 --
--- TOC entry 2757 (class 2606 OID 240686)
+-- TOC entry 2797 (class 2606 OID 248303)
 -- Name: product fk1mtsbur82frn64de7balymq9s; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -479,7 +693,7 @@ ALTER TABLE ONLY public.product
 
 
 --
--- TOC entry 2760 (class 2606 OID 240701)
+-- TOC entry 2800 (class 2606 OID 248318)
 -- Name: product_in_course fk4le0w0jg3dnena1ifnnu0fsdy; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -488,7 +702,16 @@ ALTER TABLE ONLY public.product_in_course
 
 
 --
--- TOC entry 2754 (class 2606 OID 240671)
+-- TOC entry 2791 (class 2606 OID 248273)
+-- Name: client_order fk7ubjvxcr8vheqkd9su8gr4srg; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.client_order
+    ADD CONSTRAINT fk7ubjvxcr8vheqkd9su8gr4srg FOREIGN KEY (restaurant_id) REFERENCES public.restaurant(id);
+
+
+--
+-- TOC entry 2792 (class 2606 OID 248278)
 -- Name: menu fkblwdtxevpl4mrds8a12q0ohu6; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -497,7 +720,16 @@ ALTER TABLE ONLY public.menu
 
 
 --
--- TOC entry 2756 (class 2606 OID 240681)
+-- TOC entry 2796 (class 2606 OID 248298)
+-- Name: menu_order fkf1mvypxn8rwaf37ftr2dy7ccw; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.menu_order
+    ADD CONSTRAINT fkf1mvypxn8rwaf37ftr2dy7ccw FOREIGN KEY (menu_id) REFERENCES public.menu(id);
+
+
+--
+-- TOC entry 2794 (class 2606 OID 248288)
 -- Name: menu_course fkfkf3e2n1l65toht97hx313400; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -506,7 +738,16 @@ ALTER TABLE ONLY public.menu_course
 
 
 --
--- TOC entry 2753 (class 2606 OID 240666)
+-- TOC entry 2802 (class 2606 OID 248328)
+-- Name: product_order fkh73acsd9s5wp6l0e55td6jr1m; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_order
+    ADD CONSTRAINT fkh73acsd9s5wp6l0e55td6jr1m FOREIGN KEY (product_id) REFERENCES public.product(id);
+
+
+--
+-- TOC entry 2790 (class 2606 OID 248268)
 -- Name: business_hour fkin1qvmlk3n7dta0ussafe9i4m; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -515,7 +756,7 @@ ALTER TABLE ONLY public.business_hour
 
 
 --
--- TOC entry 2755 (class 2606 OID 240676)
+-- TOC entry 2793 (class 2606 OID 248283)
 -- Name: menu_course fkkunas7ry3e7lrvafewfqtfo7i; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -524,7 +765,7 @@ ALTER TABLE ONLY public.menu_course
 
 
 --
--- TOC entry 2759 (class 2606 OID 240696)
+-- TOC entry 2799 (class 2606 OID 248313)
 -- Name: product_in_course fkkvqruproykv19i1ljwyxte3n3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -533,7 +774,34 @@ ALTER TABLE ONLY public.product_in_course
 
 
 --
--- TOC entry 2758 (class 2606 OID 240691)
+-- TOC entry 2801 (class 2606 OID 248323)
+-- Name: product_order fklnq65s4qeajvq2phf2epy7piy; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.product_order
+    ADD CONSTRAINT fklnq65s4qeajvq2phf2epy7piy FOREIGN KEY (client_order_id) REFERENCES public.client_order(id);
+
+
+--
+-- TOC entry 2804 (class 2606 OID 248338)
+-- Name: selected_product fkmvchawh2cnbjqtt23j6u10wf3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.selected_product
+    ADD CONSTRAINT fkmvchawh2cnbjqtt23j6u10wf3 FOREIGN KEY (product_in_course_id) REFERENCES public.product_in_course(id);
+
+
+--
+-- TOC entry 2795 (class 2606 OID 248293)
+-- Name: menu_order fkp1nd26wacoylvgjyay224rr50; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.menu_order
+    ADD CONSTRAINT fkp1nd26wacoylvgjyay224rr50 FOREIGN KEY (client_order_id) REFERENCES public.client_order(id);
+
+
+--
+-- TOC entry 2798 (class 2606 OID 248308)
 -- Name: product fkp4b7e36gck7975p51raud8juk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -541,7 +809,16 @@ ALTER TABLE ONLY public.product
     ADD CONSTRAINT fkp4b7e36gck7975p51raud8juk FOREIGN KEY (restaurant_id) REFERENCES public.restaurant(id);
 
 
--- Completed on 2020-07-17 07:23:51
+--
+-- TOC entry 2803 (class 2606 OID 248333)
+-- Name: selected_product fkr3g3x5x3qu55hff0baidbur16; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.selected_product
+    ADD CONSTRAINT fkr3g3x5x3qu55hff0baidbur16 FOREIGN KEY (menu_order_id) REFERENCES public.menu_order(id);
+
+
+-- Completed on 2020-08-03 17:12:18
 
 --
 -- PostgreSQL database dump complete
