@@ -1,6 +1,7 @@
 package org.clickandcollect.webservice.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.clickandcollect.business.contract.EmailService;
 import org.clickandcollect.business.contract.OrderService;
 import org.clickandcollect.business.contract.RestaurantService;
 import org.clickandcollect.model.entity.ClientOrder;
@@ -31,14 +32,16 @@ public class OrderApiController {
 
     private final RestaurantService restaurantService;
     private final OrderService orderService;
+    private final EmailService emailService;
     private final RestaurantMapper restaurantMapper;
     private final ProductMapper productMapper;
     private final MenuMapper menuMapper;
     private final OrderMapper orderMapper;
 
-    public OrderApiController(RestaurantService restaurantService, OrderService orderService, RestaurantMapper restaurantMapper, ProductMapper productMapper, MenuMapper menuMapper, OrderMapper orderMapper) {
+    public OrderApiController(RestaurantService restaurantService, OrderService orderService, EmailService emailService, RestaurantMapper restaurantMapper, ProductMapper productMapper, MenuMapper menuMapper, OrderMapper orderMapper) {
         this.restaurantService = restaurantService;
         this.orderService = orderService;
+        this.emailService = emailService;
         this.restaurantMapper = restaurantMapper;
         this.productMapper = productMapper;
         this.menuMapper = menuMapper;
@@ -63,6 +66,10 @@ public class OrderApiController {
         log.info("Sending new order for restaurant id '{}'", restaurantId);
         ClientOrder clientOrder = this.orderService.saveOrder(restaurantId, orderMapper.orderDtoToOrder(orderDto));
         log.info("Order '{}' created", clientOrder.getId());
+        log.info("Sending email clientOrderNotification order '{}'", clientOrder.getId());
+        this.emailService.sendClientOrderNotification(clientOrder);
+        log.info("Sending email restaurantOrderNotification order '{}'", clientOrder.getId());
+        this.emailService.sendRestaurantOrderNotification(clientOrder);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

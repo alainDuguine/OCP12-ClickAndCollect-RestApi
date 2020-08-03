@@ -2,6 +2,7 @@ package org.clickandcollect.webservice.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.clickandcollect.business.exception.FileHandlingException;
+import org.clickandcollect.business.exception.PickupDateTimeAttributeException;
 import org.clickandcollect.business.exception.ResourceDuplicationException;
 import org.clickandcollect.business.exception.UnauthorizedResourceException;
 import org.clickandcollect.business.exception.UnknownResourceException;
@@ -65,7 +66,7 @@ public class ExceptionControllerAdvice {
         return buildError(ex, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({MethodArgumentNotValidException.class})
+    @ExceptionHandler({MethodArgumentNotValidException.class, PickupDateTimeAttributeException.class})
     public ResponseEntity<Object> validationException(MethodArgumentNotValidException ex) {
         log.warn(LOGMSG, ex.getClass(), ex.getMessage());
         Map<String, String> mapErrors = new HashMap<>();

@@ -56,9 +56,10 @@ public class Product {
     @Builder.Default
     private List<ProductInCourse> productsInMenu = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @NotNull
     private Category category;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     private Restaurant restaurant;
