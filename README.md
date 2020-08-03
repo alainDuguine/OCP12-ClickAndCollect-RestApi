@@ -21,27 +21,31 @@
   
   ## Déploiement
   
-  ### Déploiement de la base de données avec Docker:
+  ### Déploiement de la base de données avec Docker et chargement jeu de données:
     
    A partir du répertoire : ```/docker/``` 
    exécutez la commande : ```docker-compose up```
   
+  ### Déploiement de la base de données en local et chargement jeu de données:
+  
+  Dans postgreSQL créer une base de données nommée ```db_clickandcollect```,
+  Puis exécutez les scripts présents dans le répertoire ```/docker/sql``` dans l'ordre ```(01_Schema.sql puis 02_Data.sql)```
+  
   ### Variables d'environnement :
     
    Pour l'exécution via Maven plusieurs variables d'environnement sont nécessaires :
-      
-   ```IP_SERVER``` : pour du local "localhost"    
-     
-   ```API_PORT``` : par exemple 8080
-     
-   ```POSTGRESQL_ADDON_URI```: url de la base de données (jdbc:postgresql://localhost:5432/db_clickAndCollect)
+         
+   ```POSTGRESQL_ADDON_URI```: url de la base de données (pour docker : ```jdbc:postgresql://localhost:9032/db_clickandcollect```,
+                               pour une instance locale de postgreSQL : ```jdbc:postgresql://localhost:5432/db_clickAndCollect```)
    
-   ```POSTGRESQL_ADDON_USER```: utilisateur de la base de données (adm_clickAndCollect)
+   ```POSTGRESQL_ADDON_USER```: utilisateur de la base de données (postgres)
      
    ```POSTGRESQL_ADDON_PASSWORD```: mot de passe de l'utilisateur de la base de données (admin)
    
-  ## Démarrage des applications :
+  ## Démarrage de l'application :
           
-   Exécuter la commande ```mvn spring-boot:run``` depuis ```/clickandcollect-api/clickandcollect-api-webservice```
+   Pour créer les mappers exécuter la commande ```mvn clean package -DskipTests```
+          
+   `Pour démarrer le service rest, exécuter la commande ```mvn spring-boot:run``` depuis ```/clickandcollect-api/clickandcollect-api-webservice```
          
    *Les commandes ```mvn``` peuvent être remplacées par le wrapper Maven ```mvnw```*
