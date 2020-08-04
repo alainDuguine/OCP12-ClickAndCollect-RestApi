@@ -70,6 +70,6 @@ public class OrderApiController {
         this.emailService.sendClientOrderNotification(clientOrder);
         log.info("Sending email restaurantOrderNotification order '{}'", clientOrder.getId());
         this.emailService.sendRestaurantOrderNotification(clientOrder);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
