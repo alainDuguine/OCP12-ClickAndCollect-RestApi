@@ -57,3 +57,11 @@ exécutez la commande : ```docker-compose up```
    *Les commandes ```mvn``` peuvent être remplacées par le wrapper Maven ```mvnw```*
 
 Le service Rest est en marche, vous pouvez l'essayer avec un client http, ou bien démarrer l'application cliente Angular sur le repository [ClickAndCollect-WebApp](https://github.com/alainDuguine/ClickAndCollect-WebApp)
+
+## Author
+
+Alain Duguine, alain.duguine@gmail.com
+
+## License
+
+ClickAndCollect-RestApi is available under the MIT license. See the LICENSE file for more info.
